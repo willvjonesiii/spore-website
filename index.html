@@ -72,10 +72,8 @@
     }
     .nav-logo-img {
       height: 44px; width: auto;
-      border-radius: 6px;
-      background: #fff;
-      padding: 3px 4px;
       display: block;
+      filter: brightness(1.15);
     }
     .nav-fullname {
       font-family: 'Space Grotesk', sans-serif;
@@ -551,7 +549,7 @@
       padding: 7px 16px; border-radius: 100px; margin-bottom: 24px;
     }
     .guardian-badge::before {
-      content: '🛡';
+      content: '';
     }
     .guardian-h2 {
       font-family: 'Space Grotesk', sans-serif;
@@ -833,7 +831,7 @@
 <!-- NAV -->
 <nav id="nav">
   <a href="#" class="nav-logo">
-    <img src="logo.png" alt="SPORE" class="nav-logo-img"/>
+    <img src="logo.svg" alt="SPORE" class="nav-logo-img"/>
     <span class="nav-fullname">Source Propagated<br>Organic Reality Ecosystem</span>
   </a>
   <div class="nav-links">
@@ -851,18 +849,16 @@
   <canvas id="hero-canvas"></canvas>
   <div class="hero-content">
     <h1 class="hero-h1">
-      Connection can only<br>
-      be earned <em>in person</em>
+      SPORE is the world's first platform where content unlocks only through <em>physical human presence.</em>
     </h1>
     <p class="hero-sub">
-      A revolutionary multi-portal media platform built to combat digital isolation — transforming passive digital consumption into active, in-person human connection.
+      You spread the content. Not an algorithm.<br>You are the SPORE.
     </p>
     <div class="hero-actions">
       <a href="#cta" class="btn-primary">Join the Waitlist</a>
       <a href="#cem-sticky" class="btn-ghost">See How It Works</a>
     </div>
   </div>
-  <div class="hero-scroll">Scroll</div>
 </section>
 
 <!-- PEOPLE STRIP -->
@@ -1009,7 +1005,7 @@
       <div class="portal-card">
         <img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=600&q=75" alt="Music" loading="lazy"/>
         <div class="portal-overlay">
-          <div class="portal-icon">🎵</div>
+          <div class="portal-icon" style="display:none">🎵</div>
           <div class="portal-name">Music</div>
           <div class="portal-desc">Authenticating and propagating music directly from The Source through SPORES — playback exclusive to the SPORE Music app</div>
         </div>
@@ -1017,7 +1013,7 @@
       <div class="portal-card">
         <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&q=75" alt="Movies" loading="lazy"/>
         <div class="portal-overlay">
-          <div class="portal-icon">🎬</div>
+          <div class="portal-icon" style="display:none">🎬</div>
           <div class="portal-name">Movies</div>
           <div class="portal-desc">Authenticating and propagating film and television directly from filmmakers through SPORES — designed to incentivize shared viewing experiences</div>
         </div>
@@ -1025,7 +1021,7 @@
       <div class="portal-card">
         <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&q=75" alt="Literature" loading="lazy"/>
         <div class="portal-overlay">
-          <div class="portal-icon">📖</div>
+          <div class="portal-icon" style="display:none">📖</div>
           <div class="portal-name">Literature</div>
           <div class="portal-desc">Authenticating and propagating written works — books, poetry, blogs — through shared in-person reading experiences</div>
         </div>
@@ -1033,7 +1029,7 @@
       <div class="portal-card">
         <img src="https://images.unsplash.com/photo-1536924940846-76b8d4adb12f?w=600&q=75" alt="Art" loading="lazy"/>
         <div class="portal-overlay">
-          <div class="portal-icon">🎨</div>
+          <div class="portal-icon" style="display:none">🎨</div>
           <div class="portal-name">Art</div>
           <div class="portal-desc">Authenticating and propagating visual art, photography, NFTs, performance and theatre — driving real-world engagement with art</div>
         </div>
@@ -1041,7 +1037,7 @@
       <div class="portal-card">
         <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600&q=75" alt="News" loading="lazy"/>
         <div class="portal-overlay">
-          <div class="portal-icon">📰</div>
+          <div class="portal-icon" style="display:none">📰</div>
           <div class="portal-name">News</div>
           <div class="portal-desc">Authenticating and propagating verified journalism — every report cryptographically linked to the reporter's physical presence at the scene</div>
         </div>
@@ -1049,7 +1045,7 @@
       <div class="portal-card">
         <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?w=600&q=75" alt="Social" loading="lazy"/>
         <div class="portal-overlay">
-          <div class="portal-icon">👥</div>
+          <div class="portal-icon" style="display:none">👥</div>
           <div class="portal-name">Social</div>
           <div class="portal-desc">Building social networks on Presence-Activated Profiles — every connection authenticated in person, eliminating passive solo consumption</div>
         </div>
@@ -1057,7 +1053,7 @@
       <div class="portal-card">
         <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=75" alt="Network" loading="lazy"/>
         <div class="portal-overlay">
-          <div class="portal-icon">🌐</div>
+          <div class="portal-icon" style="display:none">🌐</div>
           <div class="portal-name">Network</div>
           <div class="portal-desc">Building professional networks on Presence-Verified Connections — every contact an authenticated, in-person engagement</div>
         </div>
@@ -1065,7 +1061,7 @@
       <div class="portal-card">
         <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=75" alt="Commerce" loading="lazy"/>
         <div class="portal-overlay">
-          <div class="portal-icon">🛒</div>
+          <div class="portal-icon" style="display:none">🛒</div>
           <div class="portal-name">Commerce</div>
           <div class="portal-desc">Revolutionary consumer reviews rooted in verified human interaction — reviews activated only through in-person contact with the SPORE who wrote them</div>
         </div>
@@ -1164,32 +1160,32 @@
     </div>
     <div class="bc-grid">
       <div class="bc-card fade-in">
-        <div class="bc-icon">⛓️</div>
+        <div class="bc-icon" style="display:none">⛓️</div>
         <h4>EVM-Compatible Chain</h4>
         <p>All connections, content transfers, and bond states are written to an EVM-compatible blockchain — immutable, transparent, and verifiable by anyone.</p>
       </div>
       <div class="bc-card fade-in">
-        <div class="bc-icon">🪙</div>
+        <div class="bc-icon" style="display:none">🪙</div>
         <h4>SPORE Coin (ERC-20)</h4>
         <p>The native token powering the ecosystem. Earned through real-world engagement, content unlocks, and contribution to the network — not speculation.</p>
       </div>
       <div class="bc-card fade-in">
-        <div class="bc-icon">🎴</div>
+        <div class="bc-icon" style="display:none">🎴</div>
         <h4>Content NFTs (ERC-721)</h4>
         <p>Every piece of content is minted as an NFT with its full propagation history encoded. Provenance is permanent and human-verified from Source to recipient.</p>
       </div>
       <div class="bc-card fade-in">
-        <div class="bc-icon">🗂️</div>
+        <div class="bc-icon" style="display:none">🗂️</div>
         <h4>IPFS + Filecoin</h4>
         <p>Media stored on IPFS with Filecoin backing. Censorship-resistant, decentralised, and retrievable as long as the network exists — your content isn't owned by a server.</p>
       </div>
       <div class="bc-card fade-in">
-        <div class="bc-icon">📋</div>
+        <div class="bc-icon" style="display:none">📋</div>
         <h4>Genesis Hash Registry</h4>
         <p>Every content source is registered with a genesis hash at upload — an immutable fingerprint proving the original creator and timestamp of any piece of media on the network.</p>
       </div>
       <div class="bc-card fade-in">
-        <div class="bc-icon">🏅</div>
+        <div class="bc-icon" style="display:none">🏅</div>
         <h4>SporeBadgeAuthority</h4>
         <p>On-chain smart contract encoding the logic that distinguishes a Source Spore (original creator content) from an Echo Spore (propagated content). Objective, publicly readable status — cryptographic proof of origin, not a platform label.</p>
       </div>
