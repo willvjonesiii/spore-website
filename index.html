@@ -826,31 +826,39 @@
 <!-- NAV -->
 <nav id="nav">
   <a href="#" class="nav-logo">
-    <!-- SPORE Logo SVG -->
-    <svg viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="19" cy="19" r="18" stroke="rgba(62,207,207,0.3)" stroke-width="1"/>
-      <!-- Central orb -->
-      <circle cx="19" cy="19" r="4.5" fill="#3ECFCF"/>
-      <circle cx="19" cy="19" r="7" stroke="#3ECFCF" stroke-width="1" stroke-dasharray="2 2" opacity="0.6"/>
-      <!-- Branch arms -->
-      <line x1="19" y1="14" x2="19" y2="7" stroke="#3ECFCF" stroke-width="1.2"/>
-      <line x1="19" y1="24" x2="19" y2="31" stroke="#3ECFCF" stroke-width="1.2"/>
-      <line x1="14" y1="19" x2="7" y2="19" stroke="#3ECFCF" stroke-width="1.2"/>
-      <line x1="24" y1="19" x2="31" y2="19" stroke="#3ECFCF" stroke-width="1.2"/>
-      <!-- Diagonal branches -->
-      <line x1="15.5" y1="15.5" x2="10" y2="10" stroke="#3ECFCF" stroke-width="1" opacity="0.7"/>
-      <line x1="22.5" y1="22.5" x2="28" y2="28" stroke="#3ECFCF" stroke-width="1" opacity="0.7"/>
-      <line x1="22.5" y1="15.5" x2="28" y2="10" stroke="#3ECFCF" stroke-width="1" opacity="0.7"/>
-      <line x1="15.5" y1="22.5" x2="10" y2="28" stroke="#3ECFCF" stroke-width="1" opacity="0.7"/>
-      <!-- Endpoint circles -->
-      <circle cx="19" cy="7" r="1.5" fill="none" stroke="#3ECFCF" stroke-width="1.2"/>
-      <circle cx="19" cy="31" r="1.5" fill="none" stroke="#3ECFCF" stroke-width="1.2"/>
-      <circle cx="7" cy="19" r="1.5" fill="none" stroke="#3ECFCF" stroke-width="1.2"/>
-      <circle cx="31" cy="19" r="1.5" fill="none" stroke="#3ECFCF" stroke-width="1.2"/>
-      <circle cx="10" cy="10" r="1.2" fill="none" stroke="#3ECFCF" stroke-width="1" opacity="0.7"/>
-      <circle cx="28" cy="28" r="1.2" fill="none" stroke="#3ECFCF" stroke-width="1" opacity="0.7"/>
-      <circle cx="28" cy="10" r="1.2" fill="none" stroke="#3ECFCF" stroke-width="1" opacity="0.7"/>
-      <circle cx="10" cy="28" r="1.2" fill="none" stroke="#3ECFCF" stroke-width="1" opacity="0.7"/>
+    <!-- SPORE Logo SVG — branching mycelium tree with hollow endpoint circles -->
+    <svg viewBox="0 0 100 115" fill="none" xmlns="http://www.w3.org/2000/svg" width="32" height="37">
+      <!-- Central base orb -->
+      <circle cx="50" cy="93" r="6" fill="#3ECFCF"/>
+      <!-- Short trunk -->
+      <path d="M50 87 C50 82 50 77 50 70" stroke="#3ECFCF" stroke-width="2.2" stroke-linecap="round"/>
+      <!-- Branch: far left horizontal -->
+      <path d="M50 70 C38 70 24 67 10 59" stroke="#3ECFCF" stroke-width="1.9" stroke-linecap="round"/>
+      <circle cx="10" cy="59" r="3.2" fill="none" stroke="#3ECFCF" stroke-width="1.9"/>
+      <!-- Branch: left mid -->
+      <path d="M50 70 C38 63 26 50 17 30" stroke="#3ECFCF" stroke-width="1.9" stroke-linecap="round"/>
+      <circle cx="17" cy="30" r="3.2" fill="none" stroke="#3ECFCF" stroke-width="1.9"/>
+      <!-- Branch: center-left upper -->
+      <path d="M50 70 C44 55 36 36 30 10" stroke="#3ECFCF" stroke-width="1.9" stroke-linecap="round"/>
+      <circle cx="30" cy="10" r="3.2" fill="none" stroke="#3ECFCF" stroke-width="1.9"/>
+      <!-- Branch: center-left top -->
+      <path d="M50 70 C48 53 44 34 41 6" stroke="#3ECFCF" stroke-width="1.9" stroke-linecap="round"/>
+      <circle cx="41" cy="6" r="3.2" fill="none" stroke="#3ECFCF" stroke-width="1.9"/>
+      <!-- Branch: center top -->
+      <path d="M50 70 C50 52 50 33 50 5" stroke="#3ECFCF" stroke-width="1.9" stroke-linecap="round"/>
+      <circle cx="50" cy="5" r="3.2" fill="none" stroke="#3ECFCF" stroke-width="1.9"/>
+      <!-- Branch: center-right top -->
+      <path d="M50 70 C52 53 56 34 59 6" stroke="#3ECFCF" stroke-width="1.9" stroke-linecap="round"/>
+      <circle cx="59" cy="6" r="3.2" fill="none" stroke="#3ECFCF" stroke-width="1.9"/>
+      <!-- Branch: right upper -->
+      <path d="M50 70 C58 55 65 38 72 12" stroke="#3ECFCF" stroke-width="1.9" stroke-linecap="round"/>
+      <circle cx="72" cy="12" r="3.2" fill="none" stroke="#3ECFCF" stroke-width="1.9"/>
+      <!-- Branch: right mid -->
+      <path d="M50 70 C62 60 74 48 83 30" stroke="#3ECFCF" stroke-width="1.9" stroke-linecap="round"/>
+      <circle cx="83" cy="30" r="3.2" fill="none" stroke="#3ECFCF" stroke-width="1.9"/>
+      <!-- Branch: far right horizontal -->
+      <path d="M50 70 C62 68 76 64 90 58" stroke="#3ECFCF" stroke-width="1.9" stroke-linecap="round"/>
+      <circle cx="90" cy="58" r="3.2" fill="none" stroke="#3ECFCF" stroke-width="1.9"/>
     </svg>
     <span class="nav-wordmark">SP<span>O</span>RE</span>
   </a>
@@ -905,16 +913,16 @@
   </p>
   <div class="manifesto-stats">
     <div class="stat-item">
-      <div class="stat-num">8<span></span></div>
-      <div class="stat-label">Portals across media, social & commerce</div>
+      <div class="stat-num">5<span>B+</span></div>
+      <div class="stat-label">Social media users worldwide</div>
     </div>
     <div class="stat-item">
-      <div class="stat-num">1<span></span></div>
-      <div class="stat-label">Verified in-person interaction required to unlock any content</div>
+      <div class="stat-num">58<span>%</span></div>
+      <div class="stat-label">Report feeling lonelier since social media</div>
     </div>
     <div class="stat-item">
       <div class="stat-num">0</div>
-      <div class="stat-label">Passive solo scrolling — by design</div>
+      <div class="stat-label">Platforms requiring in-person verification</div>
     </div>
   </div>
 </section>
@@ -1328,51 +1336,95 @@ window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 60);
 });
 
-/* ── HERO PARTICLE CANVAS ───────────────────── */
+/* ── HERO FLOATING SPORES ───────────────────── */
 (function() {
   const canvas = document.getElementById('hero-canvas');
   const ctx = canvas.getContext('2d');
-  let W, H, nodes = [];
+  let W, H;
   function resize() {
     W = canvas.width  = canvas.offsetWidth;
     H = canvas.height = canvas.offsetHeight;
   }
   resize();
   window.addEventListener('resize', resize);
-  for (let i = 0; i < 55; i++) {
-    nodes.push({
-      x: Math.random() * 1920, y: Math.random() * 1080,
-      vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35,
-      r: Math.random() * 2.2 + 0.6
-    });
+
+  function newSpore() {
+    const r = 2.5 + Math.random() * 4;
+    return {
+      x:        Math.random() * W,
+      y:        H + r + Math.random() * H,   // start below screen
+      r:        r,
+      stemLen:  r * 2.2 + Math.random() * 10,
+      vy:       -(0.25 + Math.random() * 0.5),
+      vx:       (Math.random() - 0.5) * 0.18,
+      wobble:   Math.random() * Math.PI * 2,
+      wobbleSpd:0.008 + Math.random() * 0.016,
+      alpha:    0,
+      maxAlpha: 0.25 + Math.random() * 0.45,
+      fading:   false,
+    };
   }
-  function draw() {
+
+  const spores = [];
+  for (let i = 0; i < 48; i++) {
+    const s = newSpore();
+    s.y = Math.random() * H;   // seed at random heights initially
+    s.alpha = Math.random() * s.maxAlpha;
+    spores.push(s);
+  }
+
+  function drawSpore(s) {
+    ctx.save();
+    ctx.globalAlpha = s.alpha;
+    ctx.strokeStyle = '#3ECFCF';
+    ctx.lineWidth   = 1.1;
+    ctx.lineCap     = 'round';
+
+    // Curved stem below the circle
+    const sx = s.x, sy = s.y + s.r;
+    const ex = s.x + (Math.random() < 0.5 ? 1.5 : -1.5), ey = sy + s.stemLen;
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.bezierCurveTo(
+      sx + 2.5, sy + s.stemLen * 0.35,
+      ex - 2.5, ey - s.stemLen * 0.25,
+      ex, ey
+    );
+    ctx.stroke();
+
+    // Hollow circle at top — like the logo endpoint circles
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  function tick() {
     ctx.clearRect(0, 0, W, H);
-    nodes.forEach(n => {
-      n.x += n.vx; n.y += n.vy;
-      if (n.x < 0 || n.x > W) n.vx *= -1;
-      if (n.y < 0 || n.y > H) n.vy *= -1;
-      ctx.beginPath();
-      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(62,207,207,0.6)';
-      ctx.fill();
+    spores.forEach((s, i) => {
+      s.wobble += s.wobbleSpd;
+      s.x += s.vx + Math.sin(s.wobble) * 0.2;
+      s.y += s.vy;
+
+      // Fade in from bottom
+      if (!s.fading && s.alpha < s.maxAlpha) {
+        s.alpha = Math.min(s.maxAlpha, s.alpha + 0.005);
+      }
+      // Start fading when entering top 25% of screen
+      if (s.y < H * 0.25 && !s.fading) s.fading = true;
+      if (s.fading) s.alpha -= 0.004;
+
+      // Recycle when gone
+      if (s.alpha <= 0 || s.y < -40) {
+        spores[i] = newSpore();
+      }
+
+      drawSpore(s);
     });
-    nodes.forEach((a, i) => {
-      nodes.slice(i + 1).forEach(b => {
-        const d = Math.hypot(a.x - b.x, a.y - b.y);
-        if (d < 150) {
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.strokeStyle = `rgba(62,207,207,${0.18 * (1 - d / 150)})`;
-          ctx.lineWidth = 0.7;
-          ctx.stroke();
-        }
-      });
-    });
-    requestAnimationFrame(draw);
+    requestAnimationFrame(tick);
   }
-  draw();
+  tick();
 })();
 
 /* ── CEM STICKY SCROLL ──────────────────────── */
