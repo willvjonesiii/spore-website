@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Technology - SPORE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:    #081525;
+      --navy2:   #0d1e30;
+      --teal:    #3ECFCF;
+      --teal2:   #2AADAD;
+      --cream:   #FAFAF7;
+      --ink:     #0D1F3C;
+      --mid:     #8EA8C3;
+      --glow:    rgba(62,207,207,0.22);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--navy);
+      color: #fff;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; border: none; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 18px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(8,21,37,0.88);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(62,207,207,0.12);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .nav-logo-img {
+      height: 44px; width: auto;
+      display: block;
+      filter: brightness(1.15);
+    }
+    .nav-fullname {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.64rem; font-weight: 600;
+      letter-spacing: 0.13em; text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.45; max-width: 200px;
+    }
+    .nav-links { display: flex; align-items: center; gap: 36px; }
+    .nav-links a {
+      font-size: 0.85rem; font-weight: 500; letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.72);
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta {
+      background: var(--teal); color: var(--navy);
+      font-size: 0.82rem; font-weight: 700; letter-spacing: 0.06em;
+      padding: 10px 24px; border-radius: 100px;
+      transition: opacity .2s;
+    }
+    .nav-cta:hover { opacity: .88; }
+
+    /* PAGE HEADER */
+    #hero {
+      position: relative; height: 60vh; min-height: 400px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; margin-top: 60px;
+    }
+    #hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1800&q=80');
+      background-size: cover; background-position: center 30%;
+    }
+    #hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(8,21,37,0.38) 0%,
+        rgba(8,21,37,0.92) 100%
+      );
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center; padding: 0 24px;
+      max-width: 820px;
+    }
+    .hero-h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 700; line-height: 1.18;
+      margin-bottom: 20px;
+    }
+    .hero-h1 em {
+      font-family: 'Playfair Display', serif;
+      font-style: italic; color: var(--teal);
+    }
+    .hero-sub {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.72); line-height: 1.65;
+      max-width: 620px; margin: 0 auto;
+    }
+
+    /* CONTENT SECTIONS */
+    .content-section {
+      background: var(--navy);
+      padding: 100px 40px;
+      border-bottom: 1px solid rgba(62,207,207,0.1);
+    }
+    .section-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .section-kicker {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--teal);
+      margin-bottom: 20px;
+    }
+    .section-h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 700; line-height: 1.14;
+      margin-bottom: 36px;
+    }
+    .section-h2 em {
+      font-family: 'Playfair Display', serif;
+      font-style: italic; color: var(--teal);
+    }
+    .section-body {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.72);
+      margin-bottom: 24px;
+    }
+    .section-body p {
+      margin-bottom: 16px;
+    }
+    .subsection {
+      margin-top: 48px;
+    }
+    .subsection h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--teal);
+    }
+    .subsection p {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 12px;
+    }
+
+    /* TECH GRID */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+      margin-top: 48px;
+    }
+    .tech-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(62,207,207,0.15);
+      border-radius: 12px;
+      padding: 28px;
+      transition: border-color .3s, transform .3s;
+    }
+    .tech-card:hover {
+      border-color: rgba(62,207,207,0.4);
+      transform: translateY(-4px);
+    }
+    .tech-card h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+    .tech-card p {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* FOOTER */
+    footer {
+      background: #060f1a;
+      padding: 60px 40px 36px;
+    }
+    .footer-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-col h5 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 18px;
+    }
+    .footer-col a {
+      display: block;
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 10px;
+      transition: color .2s;
+    }
+    .footer-col a:hover { color: rgba(255,255,255,0.9); }
+    .footer-bottom {
+      max-width: 1160px;
+      margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.28);
+    }
+
+    @media (max-width: 900px) {
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .content-section { padding: 60px 24px; }
+      nav { padding: 18px 24px; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="logo.svg" alt="SPORE" class="nav-logo-img"/>
+    <span class="nav-fullname">Source Propagated<br>Organic Reality Ecosystem</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html#portals">Portals</a>
+    <a href="index.html#cem-sticky">How It Works</a>
+    <a href="technology.html">Technology</a>
+    <a href="index.html#guardian">Safety</a>
+  </div>
+  <a href="index.html#cta" class="nav-cta">Join Waitlist</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div id="hero-bg"></div>
+  <div class="hero-content">
+    <h1 class="hero-h1">The infrastructure of <em>real connection</em></h1>
+    <p class="hero-sub">How blockchain, biometrics, and decentralized architecture power verified human interaction at scale.</p>
+  </div>
+</section>
+
+<!-- BLOCKCHAIN SECTION -->
+<section class="content-section">
+  <div class="section-inner">
+    <div class="section-kicker">Blockchain Foundation</div>
+    <h2 class="section-h2">The <em>Blockchain Substrate</em></h2>
+
+    <div class="section-body">
+      <p>SPORE is a revolutionary multi-portal media platform designed to combat digital isolation and superficial engagement by transforming passive digital consumption into active, in-person human connection. At its core, Connection-Encoded Media (CEM) technology requires verified physical proximity and human interaction to activate and propagate content, redefining sharing and social networking. Key innovations like the "Share to Truly Share" protocol, "Organic Bond Decay," and "Guardian Root" for child safety incentivize real-world interactions and ensure content authenticity.</p>
+      <p>SPORE aims to establish a new standard for genuine human engagement, providing verifiable metrics and fostering healthier relationships across various media and social domains.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>Why Blockchain</h3>
+      <p>The SPORE ecosystem is architected as a decentralized application (dApp) that utilizes a public blockchain as its foundational substrate. The blockchain's role is not ancillary; it is the essential trust layer that provides the cryptographic and economic guarantees necessary for the protocol to function as designed. A traditional, centralized client-server model cannot provide the transparency, immutability, and censorship-resistance required for verifiable content origin and authentic social graphs.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>Three Core Pillars</h3>
+      <p>The blockchain's function across the SPORE ecosystem is organized around three core pillars: Data Integrity, Decentralized Execution, and System Persistence. Each pillar serves a distinct but interconnected purpose in establishing trust and authenticity within the network.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DATA INTEGRITY SECTION -->
+<section class="content-section">
+  <div class="section-inner">
+    <div class="section-kicker">Pillar 1</div>
+    <h2 class="section-h2">On-Chain <em>Data Integrity</em></h2>
+
+    <div class="section-body">
+      <p>The primary function of the blockchain in SPORE is to serve as an immutable ledger for all critical state information, ensuring that the history and origin of all content and connections are publicly verifiable and tamper-proof.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>The Genesis Hash Registry</h3>
+      <p>To establish verifiable origin for all content, the Genesis Hash Registry functions as an on-chain IP ledger. Every content source is registered with a genesis hash at upload, an immutable fingerprint proving the original creator and timestamp of any piece of media on the network. This cryptographic commitment ensures that no creator can later deny ownership or change the attribution of their work, and no platform can retroactively modify provenance records.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>Content NFTs and Propagation Chains</h3>
+      <p>Every piece of content is minted as an NFT with its full propagation history encoded. Provenance is permanent and human-verified from Source to recipient. The NFT serves not just as a digital artifact but as a cryptographic proof of the entire chain of custody, showing exactly which SPOREs have accessed and shared the content, and the verified in-person interactions that enabled each unlock.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DECENTRALIZED EXECUTION SECTION -->
+<section class="content-section">
+  <div class="section-inner">
+    <div class="section-kicker">Pillar 2</div>
+    <h2 class="section-h2">Decentralized <em>Execution</em></h2>
+
+    <div class="section-body">
+      <p>Smart contracts on the blockchain enforce the core rules of the SPORE protocol without requiring trust in a central authority. These contracts handle content unlocks, connection verification, token distribution, and the Organic Bond Decay mechanism.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>SporeBadgeAuthority Smart Contract</h3>
+      <p>A critical smart contract that encodes the logic distinguishing a Source SPORE (original creator content) from an Echo SPORE (propagated content). This objective, publicly readable status provides cryptographic proof of origin, not a platform label. The contract automatically evaluates whether a SPORE account is the original source based on the Genesis Hash Registry and NFT ownership records.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>Organic Bond Decay Enforcement</h3>
+      <p>Smart contracts automatically manage the Resonance Frequency mechanism, dimming profiles and depleting communication credits when users fail to meet their agreed-upon in-person connection schedules. This enforces the platform's core principle that connections must be actively maintained through real-world presence.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SYSTEM PERSISTENCE SECTION -->
+<section class="content-section">
+  <div class="section-inner">
+    <div class="section-kicker">Pillar 3</div>
+    <h2 class="section-h2">System <em>Persistence</em></h2>
+
+    <div class="section-body">
+      <p>IPFS and Filecoin provide the distributed storage layer for all media files, ensuring that content remains accessible and uncensored regardless of traditional server infrastructure.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>IPFS and Filecoin Storage</h3>
+      <p>Media is stored on IPFS with Filecoin backing. This creates a censorship-resistant, decentralized storage system where content isn't owned by a single server. As long as the network exists, the content is retrievable. This separates content persistence from platform control, ensuring that even if SPORE as a company ceased operations, the content and its provenance records would remain permanently accessible on-chain.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>EVM-Compatible Blockchain</h3>
+      <p>All connections, content transfers, and bond states are written to an EVM-compatible blockchain: immutable, transparent, and verifiable by anyone. The choice of an EVM-compatible chain provides interoperability with the broader Ethereum ecosystem while enabling the specialized logic required for SPORE's unique verification mechanisms.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TOKENOMICS SECTION -->
+<section class="content-section">
+  <div class="section-inner">
+    <div class="section-kicker">Economic Layer</div>
+    <h2 class="section-h2">SPORE <em>Coin</em></h2>
+
+    <div class="section-body">
+      <p>SPORE Coin is an ERC-20 native token powering the ecosystem. Earned through real-world engagement, content unlocks, and contribution to the network, not speculation. The token serves multiple functions within the system: enabling transactions, rewarding authentic participation, and aligning economic incentives with the platform's core mission of fostering genuine human connection.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>Earning and Participation</h3>
+      <p>SPORE Coin is earned when users unlock content through verified in-person interactions, when they share content successfully within their networks, and when they contribute to platform growth and safety. The tokenomics are designed to reward authentic engagement rather than artificial metrics, ensuring that economic value flows to those genuinely building and strengthening the network.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MYCELIUM SECTION -->
+<section class="content-section">
+  <div class="section-inner">
+    <div class="section-kicker">Social Graph</div>
+    <h2 class="section-h2">The <em>Mycelium Network</em></h2>
+
+    <div class="section-body">
+      <p>The Mycelium Network is SPORE's living social graph, where every node represents a real human and every edge represents a proven in-person interaction. Unlike traditional social networks built on follow/friend buttons, the Mycelium Network is a cryptographically verified map of actual human relationships, written permanently to the blockchain.</p>
+    </div>
+
+    <div class="subsection">
+      <h3>Verified Connections</h3>
+      <p>Each connection in the Mycelium Network is authenticated through the CEM protocol: two devices in physical proximity, biometric verification, and content unlocked together. This creates a social graph of unprecedented authenticity, where the distance between any two humans is measured in sequential verified interactions, not algorithmic recommendations.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div style="font-size:1.1rem;margin-bottom:14px">SP<span style="color:#3ECFCF">O</span>RE</div>
+      <p style="font-size: 0.85rem; line-height: 1.65; color: rgba(255,255,255,0.4); max-width: 280px;">Source Propagated Organic Reality Ecosystem. Real connection, cryptographically proven.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Platform</h5>
+      <a href="index.html#cem-sticky">How It Works</a>
+      <a href="index.html#portals">Portals</a>
+      <a href="index.html#bloom">Mass Bloom</a>
+    </div>
+    <div class="footer-col">
+      <h5>Company</h5>
+      <a href="index.html#cta">Join Waitlist</a>
+      <a href="index.html#guardian">Safety</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 SPORE. All rights reserved.</span>
+    <span>Privacy · Terms</span>
+  </div>
+</footer>
+
+</body>
+</html>

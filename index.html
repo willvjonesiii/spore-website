@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SPORE — Source Propagated Organic Reality Ecosystem</title>
+  <title>SPORE - Source Propagated Organic Reality Ecosystem</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
@@ -302,15 +302,13 @@
 
     /* ── CEM STICKY SECTION ───────────────────── */
     #cem-sticky {
-      position: relative; height: 500vh;
+      position: relative; background: var(--navy); padding: 80px 40px;
     }
     #cem-inner {
-      position: sticky; top: 0; height: 100vh;
-      display: grid; grid-template-columns: 1fr 1fr;
-      overflow: hidden;
+      position: relative; max-width: 1160px; margin: 0 auto;
     }
     #cem-photo-side {
-      position: relative; overflow: hidden;
+      display: none;
     }
     .cem-photo {
       position: absolute; inset: 0;
@@ -324,12 +322,11 @@
       background: linear-gradient(to right, transparent 60%, var(--navy) 100%);
     }
     #cem-text-side {
-      background: var(--navy);
-      display: flex; flex-direction: column; justify-content: center;
-      padding: 80px 60px;
+      background: transparent;
+      display: block; padding: 0;
     }
     .cem-header {
-      margin-bottom: 64px;
+      margin-bottom: 48px;
     }
     .cem-kicker {
       font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em;
@@ -338,25 +335,26 @@
     }
     .cem-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.2rem; font-weight: 700; line-height: 1.14;
+      font-size: 2.4rem; font-weight: 700; line-height: 1.14;
     }
     .cem-title em {
       font-family: 'Playfair Display', serif;
       font-style: italic; color: var(--teal);
     }
-    .cem-steps { display: flex; flex-direction: column; gap: 32px; }
+    .cem-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
     .cem-step {
-      display: flex; gap: 20px; align-items: flex-start;
-      opacity: 0.3; transition: opacity .4s;
+      display: flex; flex-direction: column; gap: 16px; align-items: flex-start;
+      opacity: 1; transition: opacity .4s;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(62,207,207,0.15);
+      border-radius: 12px; padding: 24px;
     }
     .cem-step.active { opacity: 1; }
     .step-num {
       flex-shrink: 0;
-      width: 36px; height: 36px; border-radius: 50%;
-      background: rgba(62,207,207,0.12); border: 1px solid rgba(62,207,207,0.3);
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--teal); border: 1px solid var(--teal);
       display: flex; align-items: center; justify-content: center;
-      font-size: 0.78rem; font-weight: 700; color: var(--teal);
-      margin-top: 2px;
+      font-size: 0.85rem; font-weight: 700; color: var(--navy);
     }
     .cem-step.active .step-num {
       background: var(--teal); color: var(--navy);
@@ -364,10 +362,10 @@
     }
     .step-text h4 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.05rem; font-weight: 700; margin-bottom: 6px;
+      font-size: 0.95rem; font-weight: 700; margin-bottom: 6px;
     }
     .step-text p {
-      font-size: 0.9rem; line-height: 1.65;
+      font-size: 0.8rem; line-height: 1.6;
       color: rgba(255,255,255,0.6);
     }
 
@@ -440,6 +438,14 @@
       display: flex; gap: 20px;
       width: max-content;
       scroll-snap-type: x mandatory;
+      animation: autoScroll 30s linear infinite;
+    }
+    .portals-track-wrap:hover .portals-track {
+      animation-play-state: paused;
+    }
+    @keyframes autoScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
     .portal-card {
       flex-shrink: 0; width: 300px; height: 420px;
@@ -604,6 +610,7 @@
     /* ── BLOCKCHAIN PILLARS ───────────────────── */
     #blockchain {
       background: var(--navy); padding: 120px 24px;
+      display: none;
     }
     .bc-inner { max-width: 1160px; margin: 0 auto; }
     .bc-header { text-align: center; margin-bottom: 72px; }
@@ -794,9 +801,9 @@
     @media (max-width: 900px) {
       .problem-inner { grid-template-columns: 1fr; }
       .problem-img { aspect-ratio: 16/9; }
-      #cem-inner { grid-template-columns: 1fr; }
-      #cem-photo-side { height: 50vh; }
-      #cem-text-side { padding: 40px 32px; }
+      .cem-steps { grid-template-columns: repeat(2, 1fr); }
+      #cem-sticky { padding: 60px 24px; }
+      .cem-header { margin-bottom: 36px; }
       .feature-row { grid-template-columns: 1fr; }
       .feature-row.reverse { direction: ltr; }
       .fr-photo { height: 360px; }
@@ -840,7 +847,7 @@
   <div class="nav-links">
     <a href="#portals">Portals</a>
     <a href="#cem-sticky">How It Works</a>
-    <a href="#blockchain">Technology</a>
+    <a href="technology.html">Technology</a>
     <a href="#guardian">Safety</a>
   </div>
   <a href="#cta" class="nav-cta">Join Waitlist</a>
@@ -870,7 +877,7 @@
   <div class="ps-cell"><img src="https://images.unsplash.com/photo-1527203561188-dae1bc1a417f?w=600&q=75" alt="people" loading="lazy"/></div>
   <div class="ps-cell"><img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?w=600&q=75" alt="group" loading="lazy"/></div>
   <div class="ps-cell"><img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&q=75" alt="community" loading="lazy"/></div>
-  <div class="ps-cell"><img src="https://images.unsplash.com/photo-1511632765153-994ad063df42?w=600&q=75" alt="concert" loading="lazy"/></div>
+  <div class="ps-cell"><img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&q=75" alt="concert" loading="lazy"/></div>
 </div>
 
 <!-- MANIFESTO -->
@@ -881,7 +888,7 @@
     <em>digital isolation</em>
   </h2>
   <p class="manifesto-body">
-    Every existing platform rewards passive consumption — scrolling alone, liking without meaning, following without knowing. SPORE was built on a different premise entirely: that genuine human engagement requires <strong>verified physical presence.</strong> Not a workaround. The foundation.
+    Every existing platform rewards passive consumption. Scrolling alone, liking without meaning, following without knowing. SPORE was built on a different premise entirely: that genuine human engagement requires <strong>verified physical presence.</strong> Not a workaround. The foundation.
   </p>
   <div class="manifesto-stats">
     <div class="stat-item">
@@ -912,7 +919,7 @@
         passive consumption. <em>SPORE doesn't.</em>
       </h2>
       <p class="problem-body">
-        Every piece of content on SPORE — every track, film, book, artwork, story — begins as a <strong>Dormant File</strong>: a blurred video preview, a pixelated image, a 30-second audio clip, a title and first three sentences. The full experience cannot be unlocked alone. It requires a real, shared, in-person interaction with another SPORE.
+        Every piece of content on SPORE starts the same way. Every track, film, book, artwork, story begins as a <strong>Dormant File</strong>: a blurred video preview, a pixelated image, a 30-second audio clip, a title and first three sentences. The full experience cannot be unlocked alone. It requires a real, shared, in-person interaction with another SPORE.
       </p>
       <div class="problem-pills">
         <span class="pill">CEM Technology</span>
@@ -952,28 +959,28 @@
           <div class="step-num">1</div>
           <div class="step-text">
             <h4>Content Enters Dormancy</h4>
-            <p>A creator uploads their work — music, art, film, writing. It becomes a Dormant File: a blurred preview, a 30-second clip, a pixelated image. The full experience is sealed inside.</p>
+            <p>A creator uploads their work: music, art, film, writing. It becomes a Dormant File: a blurred preview, a 30-second clip, a pixelated image. The full experience is sealed inside.</p>
           </div>
         </div>
         <div class="cem-step" id="step-1">
           <div class="step-num">2</div>
           <div class="step-text">
             <h4>Proximity Handshake</h4>
-            <p>To share a Dormant File, two people must be physically co-located. Devices confirm presence via NFC tap or BLE spatial awareness — then both SPORES simultaneously place a fingerprint on each other's device screen, providing a dual-biometric confirmation that two real humans are there.</p>
+            <p>To share a Dormant File, two people must be physically co-located. Devices confirm presence via NFC tap or BLE spatial awareness. Then both SPORES simultaneously place a fingerprint on each other's device screen, providing a dual-biometric confirmation that two real humans are there.</p>
           </div>
         </div>
         <div class="cem-step" id="step-2">
           <div class="step-num">3</div>
           <div class="step-text">
             <h4>The File Blooms</h4>
-            <p>Content unlocks only after both SPORES experience it together in its entirety — the full track plays, the full article is read aloud, the full video runs — with devices in proximity and biometrics active throughout. Only then is the full file permanently unlocked for solo access, and the connection written to the Mycelium Network on-chain.</p>
+            <p>Content unlocks only after both SPORES experience it together in its entirety. The full track plays, the full article is read aloud, the full video runs. Devices stay in proximity with biometrics active throughout. Only then is the full file permanently unlocked for solo access, and the connection written to the Mycelium Network on-chain.</p>
           </div>
         </div>
         <div class="cem-step" id="step-3">
           <div class="step-num">4</div>
           <div class="step-text">
             <h4>Organic Spread</h4>
-            <p>That person can now share with their in-person circle. Each hop is verified, each connection traceable back to the Source. Content travels like spores — organically, authentically, through real human networks.</p>
+            <p>That person can now share with their in-person circle. Each hop is verified, each connection traceable back to the Source. Content travels like spores: organically, authentically, through real human networks.</p>
           </div>
         </div>
       </div>
@@ -991,7 +998,7 @@
       content <em>together</em>
     </h2>
     <p class="bloom-body">
-      A concert. A book launch. A gallery opening. At a Mass Bloom, being present isn't enough — each attendee's device must perform a verified interaction with another attendee's device within the bloom radius. A mutual tap. A biometric scan. Person to person. The content unlocks collectively, through active human contact, and the entire propagation chain is written to the blockchain forever.
+      A concert. A book launch. A gallery opening. At a Mass Bloom, being present isn't enough. Each attendee's device must perform a verified interaction with another attendee's device within the bloom radius. A mutual tap. A biometric scan. Person to person. The content unlocks collectively, through active human contact, and the entire propagation chain is written to the blockchain forever.
     </p>
     <a href="#cta" class="btn-primary">Get Early Access</a>
   </div>
@@ -1010,7 +1017,7 @@
         <div class="portal-overlay">
           <div class="portal-icon" style="display:none">🎵</div>
           <div class="portal-name">Music</div>
-          <div class="portal-desc">Authenticating and propagating music directly from The Source through SPORES — playback exclusive to the SPORE Music app</div>
+          <div class="portal-desc">Authenticating and propagating music directly from The Source through SPORES. Playback exclusive to the SPORE Music app</div>
         </div>
       </div>
       <div class="portal-card">
@@ -1018,7 +1025,7 @@
         <div class="portal-overlay">
           <div class="portal-icon" style="display:none">🎬</div>
           <div class="portal-name">Movies</div>
-          <div class="portal-desc">Authenticating and propagating film and television directly from filmmakers through SPORES — designed to incentivize shared viewing experiences</div>
+          <div class="portal-desc">Authenticating and propagating film and television directly from filmmakers through SPORES. Designed to incentivize shared viewing experiences</div>
         </div>
       </div>
       <div class="portal-card">
@@ -1026,15 +1033,15 @@
         <div class="portal-overlay">
           <div class="portal-icon" style="display:none">📖</div>
           <div class="portal-name">Literature</div>
-          <div class="portal-desc">Authenticating and propagating written works — books, poetry, blogs — through shared in-person reading experiences</div>
+          <div class="portal-desc">Authenticating and propagating written works: books, poetry, blogs. Through shared in-person reading experiences</div>
         </div>
       </div>
       <div class="portal-card">
-        <img src="https://images.unsplash.com/photo-1536924940846-76b8d4adb12f?w=600&q=75" alt="Art" loading="lazy"/>
+        <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=75" alt="Art" loading="lazy"/>
         <div class="portal-overlay">
           <div class="portal-icon" style="display:none">🎨</div>
           <div class="portal-name">Art</div>
-          <div class="portal-desc">Authenticating and propagating visual art, photography, NFTs, performance and theatre — driving real-world engagement with art</div>
+          <div class="portal-desc">Authenticating and propagating visual art, photography, NFTs, performance and theatre. Driving real-world engagement with art</div>
         </div>
       </div>
       <div class="portal-card">
@@ -1042,7 +1049,7 @@
         <div class="portal-overlay">
           <div class="portal-icon" style="display:none">📰</div>
           <div class="portal-name">News</div>
-          <div class="portal-desc">Authenticating and propagating verified journalism — every report cryptographically linked to the reporter's physical presence at the scene</div>
+          <div class="portal-desc">Authenticating and propagating verified journalism. Every report cryptographically linked to the reporter's physical presence at the scene</div>
         </div>
       </div>
       <div class="portal-card">
@@ -1050,7 +1057,7 @@
         <div class="portal-overlay">
           <div class="portal-icon" style="display:none">👥</div>
           <div class="portal-name">Social</div>
-          <div class="portal-desc">Building social networks on Presence-Activated Profiles — every connection authenticated in person, eliminating passive solo consumption</div>
+          <div class="portal-desc">Building social networks on Presence-Activated Profiles. Every connection authenticated in person, eliminating passive solo consumption</div>
         </div>
       </div>
       <div class="portal-card">
@@ -1058,7 +1065,7 @@
         <div class="portal-overlay">
           <div class="portal-icon" style="display:none">🌐</div>
           <div class="portal-name">Network</div>
-          <div class="portal-desc">Building professional networks on Presence-Verified Connections — every contact an authenticated, in-person engagement</div>
+          <div class="portal-desc">Building professional networks on Presence-Verified Connections. Every contact an authenticated, in-person engagement</div>
         </div>
       </div>
       <div class="portal-card">
@@ -1066,7 +1073,32 @@
         <div class="portal-overlay">
           <div class="portal-icon" style="display:none">🛒</div>
           <div class="portal-name">Commerce</div>
-          <div class="portal-desc">Revolutionary consumer reviews rooted in verified human interaction — reviews activated only through in-person contact with the SPORE who wrote them</div>
+          <div class="portal-desc">Revolutionary consumer reviews rooted in verified human interaction. Reviews activated only through in-person contact with the SPORE who wrote them</div>
+        </div>
+      </div>
+      <!-- Duplicate for infinite scroll -->
+      <div class="portal-card">
+        <img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=600&q=75" alt="Music" loading="lazy"/>
+        <div class="portal-overlay">
+          <div class="portal-icon" style="display:none">🎵</div>
+          <div class="portal-name">Music</div>
+          <div class="portal-desc">Authenticating and propagating music directly from The Source through SPORES. Playback exclusive to the SPORE Music app</div>
+        </div>
+      </div>
+      <div class="portal-card">
+        <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600&q=75" alt="Movies" loading="lazy"/>
+        <div class="portal-overlay">
+          <div class="portal-icon" style="display:none">🎬</div>
+          <div class="portal-name">Movies</div>
+          <div class="portal-desc">Authenticating and propagating film and television directly from filmmakers through SPORES. Designed to incentivize shared viewing experiences</div>
+        </div>
+      </div>
+      <div class="portal-card">
+        <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=600&q=75" alt="Literature" loading="lazy"/>
+        <div class="portal-overlay">
+          <div class="portal-icon" style="display:none">📖</div>
+          <div class="portal-name">Literature</div>
+          <div class="portal-desc">Authenticating and propagating written works: books, poetry, blogs. Through shared in-person reading experiences</div>
         </div>
       </div>
     </div>
@@ -1076,7 +1108,7 @@
 <!-- FEATURE ROW 1: Social -->
 <div class="feature-row">
   <div class="fr-photo">
-    <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=1000&q=80" alt="social connection" loading="lazy"/>
+    <img src="https://images.unsplash.com/photo-1527525443983-6e60c75fff46?q=80&w=685&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="social connection" loading="lazy"/>
   </div>
   <div class="fr-text dark fade-in">
     <div class="fr-kicker">Organic Bond Decay</div>
@@ -1084,7 +1116,7 @@
       Connections that<br><em>breathe</em>
     </h3>
     <p class="fr-body">
-      When you connect with someone on SPORE, you both agree on a Resonance Frequency — a timeframe for how often you'll meet in person to keep the bond alive. Miss that frequency, and their profile quietly dims in your network. Communication credits deplete. The only path back: show up. Your feed stays real because your relationships are required to be.
+      When you connect with someone on SPORE, you both agree on a Resonance Frequency: a timeframe for how often you'll meet in person to keep the bond alive. Miss that frequency, and their profile quietly dims in your network. Communication credits deplete. The only path back: show up. Your feed stays real because your relationships are required to be.
     </p>
     <a href="#cta" class="fr-link">Join the waitlist</a>
   </div>
@@ -1093,7 +1125,7 @@
 <!-- FEATURE ROW 2: Bloom -->
 <div class="feature-row reverse">
   <div class="fr-photo">
-    <img src="https://images.unsplash.com/photo-1511632765153-994ad063df42?w=1000&q=80" alt="mass bloom" loading="lazy"/>
+    <img src="https://images.unsplash.com/photo-1527203561188-dae1bc1a417f?w=1000&q=80" alt="sharing content" loading="lazy"/>
   </div>
   <div class="fr-text light fade-in">
     <div class="fr-kicker">The Source</div>
@@ -1101,7 +1133,7 @@
       Creators own their<br><em>propagation</em>
     </h3>
     <p class="fr-body">
-      When you upload to SPORE, you become The Source — the original point of human origin for that content. Your work enters the network as a Dormant File, activated first through a Mass Bloom event or direct SPORE-to-SPORE sharing. Every subsequent unlock traces back to you in a provable, tamper-proof propagation chain on-chain. Your reach isn't a number. It's a verified map of every human who was there.
+      When you upload to SPORE, you become The Source: the original point of human origin for that content. Your work enters the network as a Dormant File, activated first through a Mass Bloom event or direct SPORE-to-SPORE sharing. Every subsequent unlock traces back to you in a provable, tamper-proof propagation chain on-chain. Your reach isn't a number. It's a verified map of every human who was there.
     </p>
     <a href="#cta" class="fr-link">Learn about The Source</a>
   </div>
@@ -1118,7 +1150,7 @@
       Your network.<br><em>Measured in humans.</em>
     </h3>
     <p class="fr-body">
-      SPORES Away is your distance — measured in sequential in-person connections — from anyone in the network. One SPORE Away. Three SPORES Away. Filter your feed by it. Use it to find who in your physical world bridges you to who you want to meet. Every connection in that chain is verified, human, and traceable.
+      SPORES Away is your distance: measured in sequential in-person connections from anyone in the network. One SPORE Away. Three SPORES Away. Filter your feed by it. Use it to find who in your physical world bridges you to who you want to meet. Every connection in that chain is verified, human, and traceable.
     </p>
     <a href="#cta" class="fr-link">Explore the network</a>
   </div>
@@ -1133,7 +1165,7 @@
       Built safe<br>from the <em>root up</em>
     </h2>
     <p class="guardian-body">
-      For young users, every new connection requires three devices in the same physical location simultaneously: the child's, the new contact's, and the verified parent or guardian's. All three must complete a simultaneous in-person biometric interaction. No workarounds. No remote approvals. Every single person in a child's SPORE network was added with a physically present guardian. Because safety isn't a feature — it's the foundation.
+      For young users, every new connection requires three devices in the same physical location simultaneously: the child's, the new contact's, and the verified parent or guardian's. All three must complete a simultaneous in-person biometric interaction. No workarounds. No remote approvals. Every single person in a child's SPORE network was added with a physically present guardian. Because safety isn't a feature. It's the foundation.
     </p>
     <a href="#cta" class="btn-primary">Learn about safety</a>
   </div>
@@ -1231,7 +1263,7 @@
   <div class="cta-inner fade-in">
     <h2 class="cta-h2">
       Be one of the first<br>
-      <em>Spores</em> on the network
+      <em>SPORES</em> on the network
     </h2>
     <p class="cta-body">
       SPORE is launching in private beta. Join the waitlist and be among the first humans to unlock content the way it was meant to be shared — face to face.
@@ -1383,24 +1415,13 @@ window.addEventListener('scroll', () => {
   tick();
 })();
 
-/* ── CEM STICKY SCROLL ──────────────────────── */
+/* ── CEM SECTION - Activate all steps ──────────────────────── */
 (function() {
-  const sticky = document.getElementById('cem-sticky');
-  const steps  = [0, 1, 2, 3];
-  function update() {
-    const rect = sticky.getBoundingClientRect();
-    const total = sticky.offsetHeight - window.innerHeight;
-    const progress = Math.max(0, Math.min(1, -rect.top / total));
-    const idx = Math.min(3, Math.floor(progress * 4));
-    steps.forEach(i => {
-      const s = document.getElementById('step-' + i);
-      const p = document.getElementById('cem-p' + i);
-      s.classList.toggle('active', i === idx);
-      p.classList.toggle('active', i === idx);
-    });
-  }
-  window.addEventListener('scroll', update, { passive: true });
-  update();
+  const steps = [0, 1, 2, 3];
+  steps.forEach(i => {
+    const s = document.getElementById('step-' + i);
+    if (s) s.classList.add('active');
+  });
 })();
 
 /* ── NETWORK CANVAS ─────────────────────────── */
