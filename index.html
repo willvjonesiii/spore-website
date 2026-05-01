@@ -302,13 +302,15 @@
 
     /* ── CEM STICKY SECTION ───────────────────── */
     #cem-sticky {
-      position: relative; background: var(--navy); padding: 80px 40px;
+      position: relative; height: 120vh;
     }
     #cem-inner {
-      position: relative; max-width: 1160px; margin: 0 auto;
+      position: sticky; top: 0; height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      overflow: hidden;
     }
     #cem-photo-side {
-      display: none;
+      position: relative; overflow: hidden;
     }
     .cem-photo {
       position: absolute; inset: 0;
@@ -322,11 +324,12 @@
       background: linear-gradient(to right, transparent 60%, var(--navy) 100%);
     }
     #cem-text-side {
-      background: transparent;
-      display: block; padding: 0;
+      background: var(--navy);
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 80px 60px;
     }
     .cem-header {
-      margin-bottom: 48px;
+      margin-bottom: 64px;
     }
     .cem-kicker {
       font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em;
@@ -335,26 +338,25 @@
     }
     .cem-title {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.4rem; font-weight: 700; line-height: 1.14;
+      font-size: 2.2rem; font-weight: 700; line-height: 1.14;
     }
     .cem-title em {
       font-family: 'Playfair Display', serif;
       font-style: italic; color: var(--teal);
     }
-    .cem-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+    .cem-steps { display: flex; flex-direction: column; gap: 32px; }
     .cem-step {
-      display: flex; flex-direction: column; gap: 16px; align-items: flex-start;
-      opacity: 1; transition: opacity .4s;
-      background: rgba(255,255,255,0.04); border: 1px solid rgba(62,207,207,0.15);
-      border-radius: 12px; padding: 24px;
+      display: flex; gap: 20px; align-items: flex-start;
+      opacity: 0.3; transition: opacity .4s;
     }
     .cem-step.active { opacity: 1; }
     .step-num {
       flex-shrink: 0;
-      width: 40px; height: 40px; border-radius: 50%;
-      background: var(--teal); border: 1px solid var(--teal);
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(62,207,207,0.12); border: 1px solid rgba(62,207,207,0.3);
       display: flex; align-items: center; justify-content: center;
-      font-size: 0.85rem; font-weight: 700; color: var(--navy);
+      font-size: 0.78rem; font-weight: 700; color: var(--teal);
+      margin-top: 2px;
     }
     .cem-step.active .step-num {
       background: var(--teal); color: var(--navy);
@@ -362,10 +364,10 @@
     }
     .step-text h4 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.95rem; font-weight: 700; margin-bottom: 6px;
+      font-size: 1.05rem; font-weight: 700; margin-bottom: 6px;
     }
     .step-text p {
-      font-size: 0.8rem; line-height: 1.6;
+      font-size: 0.9rem; line-height: 1.65;
       color: rgba(255,255,255,0.6);
     }
 
@@ -438,7 +440,7 @@
       display: flex; gap: 20px;
       width: max-content;
       scroll-snap-type: x mandatory;
-      animation: autoScroll 30s linear infinite;
+      animation: autoScroll 60s linear infinite;
     }
     .portals-track-wrap:hover .portals-track {
       animation-play-state: paused;
@@ -801,9 +803,9 @@
     @media (max-width: 900px) {
       .problem-inner { grid-template-columns: 1fr; }
       .problem-img { aspect-ratio: 16/9; }
-      .cem-steps { grid-template-columns: repeat(2, 1fr); }
-      #cem-sticky { padding: 60px 24px; }
-      .cem-header { margin-bottom: 36px; }
+      #cem-inner { grid-template-columns: 1fr; }
+      #cem-photo-side { height: 50vh; }
+      #cem-text-side { padding: 40px 32px; }
       .feature-row { grid-template-columns: 1fr; }
       .feature-row.reverse { direction: ltr; }
       .fr-photo { height: 360px; }
@@ -876,7 +878,7 @@
   <div class="ps-cell"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&q=75" alt="friends" loading="lazy"/></div>
   <div class="ps-cell"><img src="https://images.unsplash.com/photo-1527203561188-dae1bc1a417f?w=600&q=75" alt="people" loading="lazy"/></div>
   <div class="ps-cell"><img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?w=600&q=75" alt="group" loading="lazy"/></div>
-  <div class="ps-cell"><img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&q=75" alt="community" loading="lazy"/></div>
+  <div class="ps-cell"><img src="https://images.unsplash.com/photo-1527525443983-6e60c75fff46?q=80&w=685&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="community" loading="lazy"/></div>
   <div class="ps-cell"><img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&q=75" alt="concert" loading="lazy"/></div>
 </div>
 
@@ -1415,13 +1417,24 @@ window.addEventListener('scroll', () => {
   tick();
 })();
 
-/* ── CEM SECTION - Activate all steps ──────────────────────── */
+/* ── CEM STICKY SCROLL ──────────────────────── */
 (function() {
-  const steps = [0, 1, 2, 3];
-  steps.forEach(i => {
-    const s = document.getElementById('step-' + i);
-    if (s) s.classList.add('active');
-  });
+  const sticky = document.getElementById('cem-sticky');
+  const steps  = [0, 1, 2, 3];
+  function update() {
+    const rect = sticky.getBoundingClientRect();
+    const total = sticky.offsetHeight - window.innerHeight;
+    const progress = Math.max(0, Math.min(1, -rect.top / total));
+    const idx = Math.min(3, Math.floor(progress * 4));
+    steps.forEach(i => {
+      const s = document.getElementById('step-' + i);
+      const p = document.getElementById('cem-p' + i);
+      s.classList.toggle('active', i === idx);
+      p.classList.toggle('active', i === idx);
+    });
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
 })();
 
 /* ── NETWORK CANVAS ─────────────────────────── */
