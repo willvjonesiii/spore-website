@@ -800,31 +800,146 @@
       font-size: 0.78rem; color: rgba(255,255,255,0.28);
     }
 
-    /* ── RESPONSIVE ───────────────────────────── */
+    /* ── HAMBURGER ────────────────────────────── */
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; z-index: 200;
+    }
+    .nav-hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: #fff; border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .nav-mobile-menu {
+      display: none; position: fixed; inset: 0; z-index: 150;
+      background: rgba(8,21,37,0.97); backdrop-filter: blur(20px);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 36px;
+    }
+    .nav-mobile-menu.open { display: flex; }
+    .nav-mobile-menu a {
+      font-size: 1.6rem; font-weight: 700;
+      color: rgba(255,255,255,0.85); letter-spacing: 0.02em;
+      transition: color .2s;
+    }
+    .nav-mobile-menu a:hover { color: var(--teal); }
+    .nav-mobile-menu .nav-cta {
+      font-size: 1rem; padding: 14px 36px;
+    }
+
+    /* ── TABLET ───────────────────────────────── */
     @media (max-width: 900px) {
-      .problem-inner { grid-template-columns: 1fr; }
-      .problem-img { aspect-ratio: 16/9; }
-      #cem-inner { grid-template-columns: 1fr; }
-      #cem-photo-side { height: 50vh; }
-      #cem-text-side { padding: 40px 32px; }
-      .feature-row { grid-template-columns: 1fr; }
-      .feature-row.reverse { direction: ltr; }
-      .fr-photo { height: 360px; }
-      .fr-text { padding: 56px 32px; }
-      #bloom .bloom-content { padding: 72px 32px; }
-      .guardian-content { padding: 64px 32px; }
-      .footer-inner { grid-template-columns: 1fr 1fr; }
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+
+      #hero { min-height: 100svh; }
+      .hero-content { padding: 100px 24px 0; }
+
+      #manifesto { padding: 80px 24px; }
+      .manifesto-stats { gap: 36px; }
+      .stat-num { font-size: 2.2rem; }
+
       #people-strip { grid-template-columns: repeat(3, 1fr); }
       #people-strip .ps-cell:nth-child(n+4) { display: none; }
-      #mosaic { grid-template-columns: 1fr 1fr; height: auto; }
-      #mosaic .mosaic-cell { height: 200px; }
-      #mosaic .mosaic-cell:first-child { grid-row: auto; grid-column: span 2; }
-      .nav-links { display: none; }
-    }
-    @media (max-width: 600px) {
-      .footer-inner { grid-template-columns: 1fr; }
-      .bc-grid { grid-template-columns: 1fr; }
+
+      #problem { padding: 80px 24px; }
+      .problem-inner { grid-template-columns: 1fr; gap: 40px; }
+      .problem-img { aspect-ratio: 16/9; }
+
+      /* How It Works — stack on mobile */
+      #cem-sticky { height: auto; }
+      #cem-inner {
+        position: relative; height: auto;
+        grid-template-columns: 1fr;
+      }
+      #cem-photo-side { height: 56vw; min-height: 240px; max-height: 380px; }
+      #cem-text-side { padding: 40px 24px; }
+      .cem-header { margin-bottom: 28px; }
+      .cem-title { font-size: 1.5rem; }
+      .cem-steps { gap: 20px; }
+      .cem-step { opacity: 1 !important; }
+
+      #bloom .bloom-content { padding: 72px 24px; }
+
+      #portals { padding: 72px 0 56px; }
       .portals-track-wrap { padding: 0 20px 24px; }
+      .portal-card { width: 260px; height: 360px; }
+
+      .feature-row { grid-template-columns: 1fr; min-height: auto; }
+      .feature-row.reverse { direction: ltr; }
+      .fr-photo { height: 300px; }
+      .fr-text { padding: 48px 24px; }
+
+      #guardian .guardian-content { padding: 64px 24px; }
+
+      #network { padding: 80px 24px; }
+      #net-canvas { height: 300px; }
+
+      #cta { padding: 80px 24px; }
+
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
+
+      #mosaic { grid-template-columns: 1fr 1fr; height: auto; }
+      #mosaic .mosaic-cell { height: 180px; }
+      #mosaic .mosaic-cell:first-child { grid-row: auto; grid-column: span 2; }
+
+      .vision-content { padding: 60px 24px; }
+    }
+
+    /* ── MOBILE ───────────────────────────────── */
+    @media (max-width: 600px) {
+      nav { padding: 14px 20px; }
+      .nav-fullname { display: none; }
+
+      .hero-h1 { font-size: 1.65rem; line-height: 1.22; }
+      .hero-sub { font-size: 0.95rem; }
+      .btn-primary, .btn-ghost { padding: 14px 28px; font-size: 0.88rem; }
+
+      #manifesto { padding: 60px 20px; }
+      .manifesto-h2 { font-size: 1.9rem; }
+      .manifesto-body { font-size: 0.95rem; }
+      .manifesto-stats { flex-direction: column; gap: 28px; align-items: center; }
+
+      #problem { padding: 60px 20px; }
+
+      #cem-text-side { padding: 32px 20px; }
+      .cem-title { font-size: 1.35rem; }
+
+      .bloom-h2 { font-size: 1.8rem; }
+      .bloom-body { font-size: 0.95rem; }
+
+      .portals-h2 { font-size: 1.6rem; }
+      .portal-card { width: 240px; height: 320px; }
+
+      .fr-photo { height: 260px; }
+      .fr-text { padding: 40px 20px; }
+      .fr-h3 { font-size: 1.6rem; }
+      .fr-body { font-size: 0.92rem; }
+
+      .guardian-h2 { font-size: 1.7rem; }
+      .guardian-body { font-size: 0.92rem; }
+
+      .network-h2 { font-size: 1.6rem; }
+      #net-canvas { height: 260px; }
+
+      .cta-h2 { font-size: 1.75rem; }
+      .cta-form { flex-direction: column; align-items: stretch; }
+      .cta-input { min-width: unset; }
+      .cta-submit { width: 100%; padding: 15px; }
+
+      .vision-quote { font-size: 1.25rem; }
+
+      .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+
+      #mosaic .mosaic-cell { height: 150px; }
+
+      .bc-grid { grid-template-columns: 1fr; }
     }
 
     /* ── FADE-IN ANIMATION ────────────────────── */
@@ -853,8 +968,20 @@
     <a href="technology.html">Technology</a>
     <a href="#guardian">Safety</a>
   </div>
-  <a href="#cta" class="nav-cta">Join Waitlist</a>
+  <a href="#cta" class="nav-cta" id="nav-cta-desktop">Join Waitlist</a>
+  <div class="nav-hamburger" id="nav-hamburger">
+    <span></span><span></span><span></span>
+  </div>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="#portals" class="mobile-link">Portals</a>
+  <a href="#cem-sticky" class="mobile-link">How It Works</a>
+  <a href="technology.html" class="mobile-link">Technology</a>
+  <a href="#guardian" class="mobile-link">Safety</a>
+  <a href="#cta" class="nav-cta mobile-link">Join Waitlist</a>
+</div>
 
 <!-- HERO -->
 <section id="hero">
@@ -1523,6 +1650,27 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.12 });
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+/* ── HAMBURGER MENU ─────────────────────────── */
+(function() {
+  const burger = document.getElementById('nav-hamburger');
+  const menu   = document.getElementById('nav-mobile-menu');
+  const links  = menu.querySelectorAll('.mobile-link');
+
+  function close() {
+    burger.classList.remove('open');
+    menu.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  burger.addEventListener('click', () => {
+    const isOpen = menu.classList.toggle('open');
+    burger.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  links.forEach(l => l.addEventListener('click', close));
+})();
 
 /* ── WAITLIST FORM ──────────────────────────── */
 function handleJoin(e) {
