@@ -611,7 +611,7 @@
     .network-canvas-wrap::before {
       content: '';
       position: absolute; top: 0; left: 0; right: 0;
-      height: 180px; z-index: 2; pointer-events: none;
+      height: 60px; z-index: 2; pointer-events: none;
       background: linear-gradient(to bottom, var(--cream) 0%, transparent 100%);
     }
     #net-canvas {
@@ -1676,7 +1676,7 @@ window.addEventListener('scroll', () => {
   /* Build graph from current canvas size */
   function buildGraph() {
     const cx = W / 2, cy = H / 2;
-    const maxR = Math.min(W / 2, H / 2) * 0.84;
+    const maxR = Math.min(W * 0.46, H / 2 * 0.92);
     const s = maxR / 260; // scale factor
     const nr = (base) => Math.max(4, Math.round(base * Math.min(s, 1)));
 
