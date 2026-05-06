@@ -831,12 +831,22 @@
     .nav-mobile-menu .nav-cta {
       font-size: 1rem; padding: 14px 36px;
     }
+    .nav-mobile-close {
+      position: absolute; top: 20px; right: 24px;
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; color: rgba(255,255,255,0.7);
+      cursor: pointer; line-height: 1;
+    }
 
     /* ── TABLET ───────────────────────────────── */
     @media (max-width: 900px) {
       nav { padding: 16px 24px; }
       .nav-links { display: none; }
       .nav-hamburger { display: flex; }
+      #nav-cta-desktop { display: none; }
+      #cursor-dot, #cursor-ring { display: none; }
+      html, body, a, button { cursor: auto; }
 
       #hero { min-height: 100svh; }
       .hero-content { padding: 100px 24px 0; }
@@ -988,6 +998,7 @@
 
 <!-- MOBILE MENU -->
 <div class="nav-mobile-menu" id="nav-mobile-menu">
+  <div class="nav-mobile-close" id="nav-mobile-close">&#x2715;</div>
   <a href="#portals" class="mobile-link">Portals</a>
   <a href="#cem-sticky" class="mobile-link">How It Works</a>
   <a href="technology.html" class="mobile-link">Technology</a>
@@ -1701,9 +1712,10 @@ document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
 /* ── HAMBURGER MENU ─────────────────────────── */
 (function() {
-  const burger = document.getElementById('nav-hamburger');
-  const menu   = document.getElementById('nav-mobile-menu');
-  const links  = menu.querySelectorAll('.mobile-link');
+  const burger    = document.getElementById('nav-hamburger');
+  const menu      = document.getElementById('nav-mobile-menu');
+  const closeBtn  = document.getElementById('nav-mobile-close');
+  const links     = menu.querySelectorAll('.mobile-link');
 
   function close() {
     burger.classList.remove('open');
@@ -1717,6 +1729,7 @@ document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
     document.body.style.overflow = isOpen ? 'hidden' : '';
   });
 
+  closeBtn.addEventListener('click', close);
   links.forEach(l => l.addEventListener('click', close));
 })();
 
