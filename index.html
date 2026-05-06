@@ -582,18 +582,19 @@
     /* ── NETWORK SECTION ──────────────────────── */
     #network {
       background: var(--cream); color: var(--ink);
-      padding: 120px 24px; text-align: center;
+      padding: 120px 0 0; text-align: center;
+      overflow: hidden;
     }
     .network-kicker {
       font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em;
       text-transform: uppercase; color: var(--teal2);
-      margin-bottom: 16px;
+      margin-bottom: 16px; padding: 0 24px;
     }
     .network-h2 {
       font-family: 'Space Grotesk', sans-serif;
       font-size: clamp(2rem, 4vw, 3rem);
       font-weight: 700; line-height: 1.12;
-      max-width: 680px; margin: 0 auto 20px;
+      max-width: 680px; margin: 0 auto 20px; padding: 0 24px;
     }
     .network-h2 em {
       font-family: 'Playfair Display', serif;
@@ -602,13 +603,20 @@
     .network-body {
       font-size: 1.05rem; line-height: 1.72;
       color: rgba(13,31,60,0.65); max-width: 560px;
-      margin: 0 auto 64px;
+      margin: 0 auto 0; padding: 0 24px;
+    }
+    .network-canvas-wrap {
+      position: relative; margin-top: 0;
+    }
+    .network-canvas-wrap::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 180px; z-index: 2; pointer-events: none;
+      background: linear-gradient(to bottom, var(--cream) 0%, transparent 100%);
     }
     #net-canvas {
-      max-width: 800px; height: 400px;
-      margin: 0 auto; border-radius: 20px;
+      display: block; width: 100%; height: 520px;
       background: var(--navy);
-      border: 1px solid rgba(62,207,207,0.15);
     }
 
     /* ── BLOCKCHAIN PILLARS ───────────────────── */
@@ -899,8 +907,8 @@
 
       #guardian .guardian-content { padding: 64px 24px; }
 
-      #network { padding: 80px 24px; }
-      #net-canvas { height: 300px; }
+      #network { padding: 80px 0 0; }
+      #net-canvas { height: 420px; }
 
       #cta { padding: 80px 24px; }
 
@@ -947,7 +955,7 @@
       .guardian-body { font-size: 0.92rem; }
 
       .network-h2 { font-size: 1.6rem; }
-      #net-canvas { height: 260px; }
+      #net-canvas { height: 360px; }
 
       .cta-h2 { font-size: 1.75rem; }
       .cta-form { flex-direction: column; align-items: stretch; }
@@ -1334,7 +1342,9 @@
   <p class="network-body">
     Every node a real human. Every edge a proven in-person interaction. Watch your network grow organically as you move through the world — not as a list of usernames, but as a glowing, breathing map of your actual life.
   </p>
-  <canvas id="net-canvas"></canvas>
+  <div class="network-canvas-wrap">
+    <canvas id="net-canvas"></canvas>
+  </div>
 </section>
 
 <!-- BLOCKCHAIN -->
@@ -1708,22 +1718,23 @@ window.addEventListener('scroll', () => {
   let nodes = buildGraph(), edges = buildEdges(nodes);
 
   function spawnParticle(e) {
-    e.particles.push({ t: 0, spd: 0.004 + Math.random() * 0.004 });
+    e.particles.push({ t: 0, spd: 0.0012 + Math.random() * 0.001 });
   }
   edges.forEach(e => { if (Math.random() > 0.45) spawnParticle(e); });
 
-  /* Draw a clipped circular avatar */
-  function drawAvatar(img, x, y, r, alpha) {
+  /* Draw a clipped circular avatar with breathing scale */
+  function drawAvatar(img, x, y, r, alpha, breathe) {
+    const br = r * breathe;
     ctx.save();
     ctx.globalAlpha = alpha;
     ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.arc(x, y, br, 0, Math.PI * 2);
     ctx.clip();
     if (img && img.complete && img.naturalWidth > 0) {
-      try { ctx.drawImage(img, x - r, y - r, r * 2, r * 2); }
-      catch(e) { drawFallback(x, y, r); }
+      try { ctx.drawImage(img, x - br, y - br, br * 2, br * 2); }
+      catch(e) { drawFallback(x, y, br); }
     } else {
-      drawFallback(x, y, r);
+      drawFallback(x, y, br);
     }
     ctx.restore();
   }
@@ -1737,7 +1748,9 @@ window.addEventListener('scroll', () => {
 
   /* Draw one node with pulsing rings + avatar */
   function drawNode(n, t) {
-    const pulse = 0.5 + 0.5 * Math.sin(t * 1.7 + n.phase);
+    // Slow individual breathe — each node has its own phase
+    const pulse   = 0.5 + 0.5 * Math.sin(t * 0.55 + n.phase);       // very slow
+    const breathe = 1 + 0.04 * Math.sin(t * 0.4  + n.phase + 1.2); // avatar scale ±4%
     const dim = n.faint ? 0.35 : (n.dim ? 0.6 : 1);
 
     // Glow rings
@@ -1779,14 +1792,14 @@ window.addEventListener('scroll', () => {
       ctx.textBaseline = 'middle';
       ctx.fillText('YOU', n.x, n.y);
     } else {
-      drawAvatar(imgs[n.imgIdx], n.x, n.y, n.r, dim);
+      drawAvatar(imgs[n.imgIdx], n.x, n.y, n.r, dim, breathe);
     }
   }
 
   let t = 0;
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    t += 0.012;
+    t += 0.005;
 
     // Edges + particles
     edges.forEach(e => {
@@ -1811,7 +1824,7 @@ window.addEventListener('scroll', () => {
         ctx.fillStyle = `rgba(62,207,207,${pa})`;
         ctx.fill();
       }
-      if (Math.random() < 0.005) spawnParticle(e);
+      if (Math.random() < 0.0018) spawnParticle(e);
     });
 
     // Draw nodes: faint → dim → bright → root last (on top)
