@@ -850,18 +850,29 @@
       .problem-inner { grid-template-columns: 1fr; gap: 40px; }
       .problem-img { aspect-ratio: 16/9; }
 
-      /* How It Works — stack on mobile */
+      /* How It Works — scroll reveal cards on mobile */
       #cem-sticky { height: auto; }
-      #cem-inner {
-        position: relative; height: auto;
-        grid-template-columns: 1fr;
+      #cem-inner { position: relative; height: auto; display: block; }
+      #cem-photo-side { display: none; }
+      #cem-text-side {
+        padding: 56px 24px;
+        display: block;
       }
-      #cem-photo-side { height: 56vw; min-height: 240px; max-height: 380px; }
-      #cem-text-side { padding: 40px 24px; }
-      .cem-header { margin-bottom: 28px; }
+      .cem-header { margin-bottom: 32px; }
       .cem-title { font-size: 1.5rem; }
-      .cem-steps { gap: 20px; }
-      .cem-step { opacity: 1 !important; }
+      .cem-steps { gap: 0; display: flex; flex-direction: column; }
+      .cem-step {
+        opacity: 0;
+        transform: translateY(32px);
+        transition: opacity .55s ease, transform .55s ease;
+        padding: 20px 0;
+        border-bottom: 1px solid rgba(62,207,207,0.12);
+      }
+      .cem-step:last-child { border-bottom: none; }
+      .cem-step.mob-visible {
+        opacity: 1 !important;
+        transform: translateY(0);
+      }
 
       #bloom .bloom-content { padding: 72px 24px; }
 
@@ -1544,24 +1555,60 @@ window.addEventListener('scroll', () => {
   tick();
 })();
 
-/* ── CEM STICKY SCROLL ──────────────────────── */
+/* ── CEM STICKY SCROLL (desktop) / SCROLL REVEAL (mobile) ── */
 (function() {
-  const sticky = document.getElementById('cem-sticky');
-  const steps  = [0, 1, 2, 3];
-  function update() {
-    const rect = sticky.getBoundingClientRect();
-    const total = sticky.offsetHeight - window.innerHeight;
-    const progress = Math.max(0, Math.min(1, -rect.top / total));
-    const idx = Math.min(3, Math.floor(progress * 4));
-    steps.forEach(i => {
-      const s = document.getElementById('step-' + i);
-      const p = document.getElementById('cem-p' + i);
-      s.classList.toggle('active', i === idx);
-      p.classList.toggle('active', i === idx);
+  const MOBILE = () => window.innerWidth <= 900;
+
+  /* ── Desktop: sticky parallax ── */
+  function initDesktop() {
+    const sticky = document.getElementById('cem-sticky');
+    function update() {
+      if (MOBILE()) return;
+      const rect  = sticky.getBoundingClientRect();
+      const total = sticky.offsetHeight - window.innerHeight;
+      const prog  = Math.max(0, Math.min(1, -rect.top / total));
+      const idx   = Math.min(3, Math.floor(prog * 4));
+      [0,1,2,3].forEach(i => {
+        document.getElementById('step-' + i).classList.toggle('active', i === idx);
+        document.getElementById('cem-p'  + i).classList.toggle('active', i === idx);
+      });
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+
+  /* ── Mobile: scroll reveal ── */
+  function initMobile() {
+    const steps = document.querySelectorAll('.cem-step');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('mob-visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.25 });
+    steps.forEach((s, i) => {
+      s.style.transitionDelay = (i * 0.1) + 's';
+      io.observe(s);
     });
   }
-  window.addEventListener('scroll', update, { passive: true });
-  update();
+
+  if (MOBILE()) {
+    initMobile();
+  } else {
+    initDesktop();
+  }
+
+  /* Re-init on resize crossing breakpoint */
+  let wasMobile = MOBILE();
+  window.addEventListener('resize', () => {
+    const isMobile = MOBILE();
+    if (isMobile !== wasMobile) {
+      wasMobile = isMobile;
+      if (isMobile) initMobile(); else initDesktop();
+    }
+  });
 })();
 
 /* ── NETWORK CANVAS ─────────────────────────── */
