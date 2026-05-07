@@ -389,7 +389,6 @@
     /* ── MASS BLOOM ───────────────────────────── */
     #bloom {
       position: relative; z-index: 1;
-      margin-top: -100vh; /* covers the dead-zone at the end of the sticky How It Works section */
       min-height: 100vh;
       display: flex; align-items: center; overflow: hidden;
     }
@@ -550,6 +549,24 @@
     .fr-link:hover { gap: 14px; }
     .fr-link::after { content: '→'; }
 
+    /* ── FEATURE ROW TILE ANIMATION ─────────────── */
+    .tile-row .fr-photo {
+      opacity: 0;
+      transform: translateX(-56px);
+      transition: opacity 0.85s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.85s cubic-bezier(0.22,1,0.36,1);
+    }
+    .tile-row .fr-text {
+      opacity: 0;
+      transform: translateX(56px);
+      transition: opacity 0.85s cubic-bezier(0.22,1,0.36,1) 0.1s,
+                  transform 0.85s cubic-bezier(0.22,1,0.36,1) 0.1s;
+    }
+    .tile-row.reverse .fr-photo { transform: translateX(56px); }
+    .tile-row.reverse .fr-text  { transform: translateX(-56px); }
+    .tile-row.tile-in .fr-photo,
+    .tile-row.tile-in .fr-text  { opacity: 1; transform: translateX(0); }
+
     /* ── GUARDIAN ─────────────────────────────── */
     #guardian {
       position: relative; min-height: 72vh;
@@ -605,6 +622,7 @@
       text-align: center;
       padding: 100px 24px 64px;
       position: relative; z-index: 2;
+      margin-top: -100vh; /* overlaps the pinned canvas — slides away to reveal it */
       border-radius: 0 0 28px 28px;
       box-shadow: 0 14px 48px rgba(8,21,37,0.22);
     }
@@ -630,7 +648,7 @@
     }
     .network-pin {
       position: relative;
-      height: 200vh; /* gives canvas 100vh of sticky dwell time */
+      height: 300vh; /* canvas pins for 200vh: text slides off first 60vh, canvas exposed for ~140vh, vision rises over last 100vh */
     }
     .network-canvas-wrap {
       position: sticky; top: 0;
@@ -1296,11 +1314,11 @@
 </section>
 
 <!-- FEATURE ROW 1: Social -->
-<div class="feature-row">
+<div class="feature-row tile-row">
   <div class="fr-photo">
     <img src="https://images.unsplash.com/photo-1527525443983-6e60c75fff46?q=80&w=685&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="social connection" loading="lazy"/>
   </div>
-  <div class="fr-text dark fade-in">
+  <div class="fr-text dark">
     <div class="fr-kicker">Organic Bond Decay</div>
     <h3 class="fr-h3">
       Connections that<br><em>breathe</em>
@@ -1313,11 +1331,11 @@
 </div>
 
 <!-- FEATURE ROW 2: Bloom -->
-<div class="feature-row reverse">
+<div class="feature-row tile-row reverse">
   <div class="fr-photo">
     <img src="https://images.unsplash.com/photo-1527203561188-dae1bc1a417f?w=1000&q=80" alt="sharing content" loading="lazy"/>
   </div>
-  <div class="fr-text light fade-in">
+  <div class="fr-text light">
     <div class="fr-kicker">The Source</div>
     <h3 class="fr-h3">
       Creators own their<br><em>propagation</em>
@@ -1330,11 +1348,11 @@
 </div>
 
 <!-- FEATURE ROW 3: Bond -->
-<div class="feature-row">
+<div class="feature-row tile-row">
   <div class="fr-photo">
     <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1000&q=80" alt="human bonds" loading="lazy"/>
   </div>
-  <div class="fr-text dark fade-in">
+  <div class="fr-text dark">
     <div class="fr-kicker">SPORES Away</div>
     <h3 class="fr-h3">
       Your network.<br><em>Measured in humans.</em>
@@ -1363,19 +1381,21 @@
 
 <!-- NETWORK VISUALIZATION -->
 <section id="network">
-  <div class="network-text">
-    <div class="network-kicker">The Mycelium Network</div>
-    <h2 class="network-h2">
-      Your <em>living</em> social graph —<br>
-      verified by presence
-    </h2>
-    <p class="network-body">
-      Every node a real human. Every edge a proven in-person interaction. Watch your network grow organically as you move through the world — not as a list of usernames, but as a glowing, breathing map of your actual life.
-    </p>
-  </div>
   <div class="network-pin">
+    <!-- Canvas pins behind everything while user scrolls -->
     <div class="network-canvas-wrap">
       <canvas id="net-canvas"></canvas>
+    </div>
+    <!-- Cream card sits on top of canvas at start; scrolls away to reveal canvas below -->
+    <div class="network-text">
+      <div class="network-kicker">The Mycelium Network</div>
+      <h2 class="network-h2">
+        Your <em>living</em> social graph —<br>
+        verified by presence
+      </h2>
+      <p class="network-body">
+        Every node a real human. Every edge a proven in-person interaction. Watch your network grow organically as you move through the world — not as a list of usernames, but as a glowing, breathing map of your actual life.
+      </p>
     </div>
   </div>
 </section>
@@ -1927,6 +1947,17 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.12 });
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+/* ── TILE ROW ANIMATION ──────────────────────── */
+const tileObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('tile-in');
+      tileObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.18 });
+document.querySelectorAll('.tile-row').forEach(el => tileObserver.observe(el));
 
 /* ── HAMBURGER MENU ─────────────────────────── */
 (function() {
