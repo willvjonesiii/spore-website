@@ -309,15 +309,8 @@
     /* ── CEM STICKY SECTION ───────────────────── */
     #cem-sticky {
       position: relative; height: 400vh;
-    }
-    /* Fill the 100vh dead-zone that sticky always leaves at the end */
-    #cem-sticky::after {
-      content: '';
-      position: absolute; bottom: 0; left: 0; right: 0;
-      height: 100vh;
-      background-image: url('https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=1800&q=80');
-      background-size: cover; background-position: center;
-      z-index: 0;
+      background: var(--navy);
+      z-index: 2; /* sits above bloom (z-index:1) so the dead-zone shows navy, not a ghost of bloom */
     }
     #cem-inner {
       position: sticky; top: 0; height: 100vh;
@@ -713,7 +706,7 @@
     #vision {
       position: relative; z-index: 2;
       min-height: 100vh;
-      margin-top: -100vh; /* rises over the pinned canvas */
+      margin-top: -200vh; /* starts rising from the bottom the instant the cream card begins to exit */
       display: flex; align-items: center; justify-content: center;
       text-align: center; overflow: hidden;
     }
