@@ -81,6 +81,13 @@
       display: block;
       filter: brightness(1.15);
     }
+    .nav-mob-wordmark {
+      display: none; /* shown only on mobile */
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.15rem; font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #fff;
+    }
     .nav-fullname {
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.64rem; font-weight: 600;
@@ -965,6 +972,7 @@
     @media (max-width: 600px) {
       nav { padding: 14px 20px; }
       .nav-fullname { display: none; }
+      .nav-mob-wordmark { display: inline; }
 
       .hero-h1 { font-size: 1.65rem; line-height: 1.22; }
       .hero-sub { font-size: 0.95rem; }
@@ -1038,6 +1046,7 @@
   <a href="#" class="nav-logo">
     <img src="logo.svg" alt="SPORE" class="nav-logo-img"/>
     <span class="nav-fullname">Source Propagated<br>Organic Reality Ecosystem</span>
+    <span class="nav-mob-wordmark">SP<span style="color:var(--teal)">O</span>RE</span>
   </a>
   <div class="nav-links">
     <a href="#portals">Portals</a>
