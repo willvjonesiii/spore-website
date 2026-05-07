@@ -807,6 +807,16 @@
       transition: opacity .2s, transform .2s;
     }
     .cta-submit:hover { opacity:.9; transform:translateY(-1px); }
+    .cta-whitepaper {
+      display: inline-block;
+      margin-top: 18px;
+      font-size: 0.85rem; font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      transition: color .2s, border-color .2s;
+    }
+    .cta-whitepaper:hover { color: var(--teal); border-color: var(--teal); }
     .cta-avatars {
       display: flex; align-items: center; justify-content: center; gap: -8px;
       margin-bottom: 12px;
@@ -928,24 +938,67 @@
       }
       .cem-header { margin-bottom: 32px; }
       .cem-title { font-size: 1.5rem; }
-      .cem-steps { gap: 0; display: flex; flex-direction: column; }
+      /* Inscription animation for How It Works on mobile */
+      .cem-steps { gap: 0; display: flex; flex-direction: column; position: relative; }
       .cem-step {
-        opacity: 0;
-        transform: translateY(32px);
-        transition: opacity .55s ease, transform .55s ease;
+        opacity: 1;
+        transform: none;
         padding: 20px 0;
         border-bottom: 1px solid rgba(62,207,207,0.12);
+        position: relative;
       }
       .cem-step:last-child { border-bottom: none; }
-      .cem-step.mob-visible {
-        opacity: 1 !important;
-        transform: translateY(0);
+      .cem-step::after {
+        content: '';
+        position: absolute; inset: 0;
+        background: rgba(62,207,207,0.07);
+        opacity: 0; transition: opacity 0.3s ease;
+        pointer-events: none;
       }
+      .cem-step.flash::after { opacity: 1; }
+
+      /* Glowing sweep line */
+      .cem-line {
+        position: absolute; top: 0; left: 0;
+        width: 100%; height: 2px;
+        background: linear-gradient(to right, transparent, var(--teal), transparent);
+        opacity: 0;
+        filter: blur(0.5px);
+        box-shadow: 0 0 8px var(--teal), 0 0 20px rgba(62,207,207,0.4);
+        pointer-events: none; z-index: 4;
+      }
+
+      /* Step elements: hidden until line passes */
+      .step-num {
+        color: transparent;
+        background: transparent;
+        border-color: rgba(62,207,207,0.22);
+        transition: color 0.35s ease, background 0.35s ease, border-color 0.35s ease;
+      }
+      .cem-step.active .step-num {
+        color: transparent; background: transparent; border-color: rgba(62,207,207,0.22);
+      }
+      .step-num.inscribed {
+        color: var(--navy) !important;
+        background: var(--teal) !important;
+        border-color: var(--teal) !important;
+      }
+      .cem-step h4 {
+        opacity: 0; transform: translateY(6px);
+        transition: opacity 0.55s ease, transform 0.55s ease;
+      }
+      .cem-step h4.inscribed { opacity: 1; transform: none; }
+      .cem-step p {
+        opacity: 0; transform: translateY(8px);
+        transition: opacity 0.55s ease 0.12s, transform 0.55s ease 0.12s;
+      }
+      .cem-step p.inscribed { opacity: 1; transform: none; }
 
       #bloom .bloom-content { padding: 72px 24px; }
 
       #portals { padding: 72px 0 56px; }
-      .portals-track-wrap { padding: 0 20px 24px; }
+      .portals-track-wrap { padding: 0 20px 24px; overflow-x: scroll; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; }
+      .portals-track { animation: none; }
       .portal-card { width: 260px; height: 360px; }
 
       .feature-row { grid-template-columns: 1fr; min-height: auto; }
@@ -971,8 +1024,9 @@
     /* ── MOBILE ───────────────────────────────── */
     @media (max-width: 600px) {
       nav { padding: 14px 20px; }
-      .nav-fullname { display: none; }
-      .nav-mob-wordmark { display: inline; }
+      .nav-logo-img { display: none; }
+      .nav-fullname { display: inline; max-width: none; font-size: 0.63rem; letter-spacing: 0.1em; }
+      .nav-mob-wordmark { display: none; }
 
       .hero-h1 { font-size: 1.65rem; line-height: 1.22; }
       .hero-sub { font-size: 0.95rem; }
@@ -1172,6 +1226,7 @@
         <h2 class="cem-title">How <em>SPORE</em> works</h2>
       </div>
       <div class="cem-steps">
+        <div class="cem-line" id="cem-line"></div>
         <div class="cem-step active" id="step-0">
           <div class="step-num">1</div>
           <div class="step-text">
@@ -1497,6 +1552,7 @@
       <input type="email" class="cta-input" placeholder="your@email.com" required id="email-input"/>
       <button type="submit" class="cta-submit">Get Early Access</button>
     </form>
+    <a href="SPORE Whitepaper.pdf" target="_blank" rel="noopener" class="cta-whitepaper">Read the Whitepaper</a>
     <div class="cta-avatars">
       <div class="avatar-bubble"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&q=70" alt=""/></div>
       <div class="avatar-bubble"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=80&q=70" alt=""/></div>
@@ -1513,7 +1569,7 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <div class="nav-wordmark" style="font-size:1.1rem;margin-bottom:14px">SP<span style="color:#3ECFCF">O</span>RE</div>
-      <p class="footer-tagline">Source Propagated Organic Reality Ecosystem. Real connection, cryptographically proven.</p>
+      <p class="footer-tagline">Source Propagated Organic Reality Ecosystem.</p>
     </div>
     <div class="footer-col">
       <h5>Platform</h5>
@@ -1662,21 +1718,58 @@ window.addEventListener('scroll', () => {
     update();
   }
 
-  /* ── Mobile: scroll reveal ── */
+  /* ── Mobile: inscription sweep animation ── */
   function initMobile() {
-    const steps = document.querySelectorAll('.cem-step');
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('mob-visible');
-          io.unobserve(e.target);
-        }
+    const stepsContainer = document.querySelector('.cem-steps');
+    const line = document.getElementById('cem-line');
+    const steps = Array.from(document.querySelectorAll('.cem-step'));
+    if (!stepsContainer || !line || !steps.length) return;
+
+    let fired = false;
+    function runInscription() {
+      if (fired) return;
+      fired = true;
+      const DURATION = 4400;
+      const startTime = performance.now();
+      const cr = stepsContainer.getBoundingClientRect();
+      const total = stepsContainer.offsetHeight;
+      const triggers = steps.map(step => {
+        const r = step.getBoundingClientRect();
+        return r.top - cr.top + r.height * 0.45;
       });
-    }, { threshold: 0.25 });
-    steps.forEach((s, i) => {
-      s.style.transitionDelay = (i * 0.1) + 's';
-      io.observe(s);
-    });
+      let nextTrigger = 0;
+      line.style.opacity = '1';
+
+      function tick(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / DURATION, 1);
+        const pos = progress * total;
+        line.style.transform = `translateY(${pos}px)`;
+        while (nextTrigger < triggers.length && pos >= triggers[nextTrigger]) {
+          const step = steps[nextTrigger];
+          const num = step.querySelector('.step-num');
+          const h4  = step.querySelector('h4');
+          const p   = step.querySelector('p');
+          step.classList.add('flash');
+          setTimeout(() => step.classList.remove('flash'), 500);
+          if (num) setTimeout(() => num.classList.add('inscribed'),   0);
+          if (h4)  setTimeout(() => h4.classList.add('inscribed'),  130);
+          if (p)   setTimeout(() => p.classList.add('inscribed'),   270);
+          nextTrigger++;
+        }
+        if (progress < 1) requestAnimationFrame(tick);
+        else {
+          line.style.transition = 'opacity 0.8s ease';
+          line.style.opacity = '0';
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) runInscription(); });
+    }, { threshold: 0.3 });
+    io.observe(stepsContainer);
   }
 
   if (MOBILE()) {
@@ -1989,6 +2082,39 @@ document.querySelectorAll('.tile-row').forEach(el => tileObserver.observe(el));
 
   closeBtn.addEventListener('click', close);
   links.forEach(l => l.addEventListener('click', close));
+})();
+
+/* ── PORTALS MOBILE AUTO-SCROLL ─────────────── */
+(function() {
+  if (window.innerWidth > 900) return;
+  const wrap = document.querySelector('.portals-track-wrap');
+  if (!wrap) return;
+
+  const SPEED = 0.7; // px per frame ≈ matches CSS animation pace
+  let running = true;
+  let resumeTimer;
+
+  function tick() {
+    if (running) {
+      wrap.scrollLeft += SPEED;
+      const half = wrap.scrollWidth / 2;
+      if (half > 0 && wrap.scrollLeft >= half) {
+        wrap.scrollLeft -= half; // seamless loop (HTML has duped cards)
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  wrap.addEventListener('touchstart', () => {
+    running = false;
+    clearTimeout(resumeTimer);
+  }, { passive: true });
+
+  wrap.addEventListener('touchend', () => {
+    resumeTimer = setTimeout(() => { running = true; }, 2000);
+  }, { passive: true });
+
+  requestAnimationFrame(tick);
 })();
 
 /* ── WAITLIST FORM ──────────────────────────── */
