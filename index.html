@@ -997,12 +997,19 @@
       .network-h2 { font-size: 1.6rem; }
       .network-text { padding: 52px 20px 40px; }
 
+      /* Mobile parallax: shorter pin = less scroll, earlier vision rise */
+      .network-pin { height: 200vh; }
+      #vision { margin-top: -60vh; }
+
       .cta-h2 { font-size: 1.75rem; }
       .cta-form { flex-direction: column; align-items: stretch; }
       .cta-input { min-width: unset; }
       .cta-submit { width: 100%; padding: 15px; }
 
-      .vision-quote { font-size: 1.25rem; }
+      /* Vision quote: fill ~2/3 of screen on mobile */
+      .vision-quote { font-size: 2rem; line-height: 1.45; }
+      .vision-content { padding: 44px 20px; max-width: 100%; }
+      .vision-attr { font-size: 0.78rem; margin-top: 20px; }
 
       .footer-inner { grid-template-columns: 1fr; gap: 28px; }
       .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
