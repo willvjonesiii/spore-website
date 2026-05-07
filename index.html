@@ -310,10 +310,19 @@
     #cem-sticky {
       position: relative; height: 400vh;
     }
+    /* Fill the 100vh dead-zone that sticky always leaves at the end */
+    #cem-sticky::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 100vh;
+      background-image: url('https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=1800&q=80');
+      background-size: cover; background-position: center;
+      z-index: 0;
+    }
     #cem-inner {
       position: sticky; top: 0; height: 100vh;
       display: grid; grid-template-columns: 1fr 1fr;
-      overflow: hidden;
+      overflow: hidden; z-index: 1;
     }
     #cem-photo-side {
       position: relative; overflow: hidden;
@@ -589,7 +598,7 @@
     #network {
       background: var(--navy);
       padding: 0;
-      overflow: hidden;
+      /* NOTE: NO overflow:hidden here — it breaks position:sticky on children */
     }
     .network-text {
       background: var(--cream); color: var(--ink);
