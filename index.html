@@ -358,9 +358,12 @@
     }
     #cem-text-side::before {
       content: '';
-      position: absolute; inset: 0;
-      background: url('logo.svg') center / 220px no-repeat;
-      opacity: 0.05;
+      position: absolute;
+      width: 600px; height: 600px;
+      top: 50%; transform: translateY(-50%);
+      right: -300px;
+      background: url('spore-logo-simple.png') center / contain no-repeat;
+      opacity: 0.08;
       pointer-events: none; z-index: -1;
     }
     .cem-header {
@@ -535,16 +538,30 @@
       padding: 80px 80px;
       position: relative; isolation: isolate;
     }
-    .fr-text::before {
+    .fr-text.dark { background: var(--navy); color: #fff; }
+    .fr-text.light { background: var(--cream); color: var(--ink); }
+    /* Organic Bond Decay — watermark right edge */
+    #fr-bond-decay .fr-text::before {
       content: '';
-      position: absolute; inset: 0;
-      background: url('logo.svg') center / 200px no-repeat;
+      position: absolute;
+      width: 600px; height: 600px;
+      top: 50%; transform: translateY(-50%);
+      right: -300px;
+      background: url('spore-logo-simple.png') center / contain no-repeat;
+      opacity: 0.08;
       pointer-events: none; z-index: -1;
     }
-    .fr-text.dark { background: var(--navy); color: #fff; }
-    .fr-text.dark::before { opacity: 0.06; }
-    .fr-text.light { background: var(--cream); color: var(--ink); }
-    .fr-text.light::before { opacity: 0.04; }
+    /* The Source — watermark left edge */
+    #fr-source .fr-text::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      top: 50%; transform: translateY(-50%);
+      left: -300px;
+      background: url('spore-logo-simple.png') center / contain no-repeat;
+      opacity: 0.09;
+      pointer-events: none; z-index: -1;
+    }
     .fr-kicker {
       font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em;
       text-transform: uppercase; margin-bottom: 20px;
@@ -1408,7 +1425,7 @@
 </section>
 
 <!-- FEATURE ROW 1: Social -->
-<div class="feature-row tile-row">
+<div class="feature-row tile-row" id="fr-bond-decay">
   <div class="fr-photo">
     <img src="https://images.unsplash.com/photo-1527525443983-6e60c75fff46?q=80&w=685&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="social connection" loading="lazy"/>
   </div>
@@ -1425,7 +1442,7 @@
 </div>
 
 <!-- FEATURE ROW 2: Bloom -->
-<div class="feature-row tile-row reverse">
+<div class="feature-row tile-row reverse" id="fr-source">
   <div class="fr-photo">
     <img src="https://images.unsplash.com/photo-1527203561188-dae1bc1a417f?w=1000&q=80" alt="sharing content" loading="lazy"/>
   </div>
