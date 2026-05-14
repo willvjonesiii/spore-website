@@ -358,11 +358,8 @@
     }
     #cem-text-side::before {
       content: '';
-      position: absolute;
-      width: 600px; height: 600px;
-      top: 50%; transform: translateY(-50%);
-      right: -300px;
-      background: url('spore-logo-simple.png') center / contain no-repeat;
+      position: absolute; inset: 0;
+      background: url('spore-logo-simple.png') center / 400px no-repeat;
       opacity: 0.08;
       pointer-events: none; z-index: -1;
     }
