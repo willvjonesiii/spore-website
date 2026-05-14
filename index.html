@@ -354,6 +354,14 @@
       background: var(--navy);
       display: flex; flex-direction: column; justify-content: center;
       padding: 40px 48px;
+      position: relative; isolation: isolate;
+    }
+    #cem-text-side::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url('logo.svg') center / 220px no-repeat;
+      opacity: 0.05;
+      pointer-events: none; z-index: -1;
     }
     .cem-header {
       margin-bottom: 28px;
@@ -525,9 +533,18 @@
     .fr-text {
       display: flex; flex-direction: column; justify-content: center;
       padding: 80px 80px;
+      position: relative; isolation: isolate;
+    }
+    .fr-text::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url('logo.svg') center / 200px no-repeat;
+      pointer-events: none; z-index: -1;
     }
     .fr-text.dark { background: var(--navy); color: #fff; }
+    .fr-text.dark::before { opacity: 0.06; }
     .fr-text.light { background: var(--cream); color: var(--ink); }
+    .fr-text.light::before { opacity: 0.04; }
     .fr-kicker {
       font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em;
       text-transform: uppercase; margin-bottom: 20px;
