@@ -2162,14 +2162,33 @@ document.querySelectorAll('.tile-row').forEach(el => tileObserver.observe(el));
 })();
 
 /* ── WAITLIST FORM ──────────────────────────── */
-function handleJoin(e) {
+async function handleJoin(e) {
   e.preventDefault();
-  const btn = e.target.querySelector('button');
+  const btn   = e.target.querySelector('button');
   const input = document.getElementById('email-input');
-  btn.textContent = '✓ You\'re on the list';
-  btn.style.background = '#2AADAD';
-  input.disabled = true;
-  btn.disabled = true;
+
+  btn.textContent = 'Joining...';
+  btn.disabled    = true;
+
+  try {
+    const res = await fetch('https://formspree.io/f/mgoqaaar', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body:    JSON.stringify({ email: input.value }),
+    });
+
+    if (res.ok) {
+      btn.textContent       = '✓ You\'re on the list';
+      btn.style.background  = '#2AADAD';
+      input.disabled        = true;
+    } else {
+      btn.textContent = 'Try again';
+      btn.disabled    = false;
+    }
+  } catch {
+    btn.textContent = 'Try again';
+    btn.disabled    = false;
+  }
 }
 </script>
 </body>
