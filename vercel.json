@@ -1,0 +1,11 @@
+{
+  "redirects": [
+    { "source": "/deck", "destination": "/pitch/", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/pitch/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+    }
+  ]
+}
