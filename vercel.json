@@ -2,9 +2,19 @@
   "redirects": [
     { "source": "/deck", "destination": "/pitch/", "permanent": true }
   ],
+  "rewrites": [
+    { "source": "/s/:code", "destination": "https://spore-app-umber.vercel.app/s/:code" },
+    { "source": "/_expo/:path*", "destination": "https://spore-app-umber.vercel.app/_expo/:path*" },
+    { "source": "/assets/:path*", "destination": "https://spore-app-umber.vercel.app/assets/:path*" },
+    { "source": "/favicon.ico", "destination": "https://spore-app-umber.vercel.app/favicon.ico" }
+  ],
   "headers": [
     {
       "source": "/pitch/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+    },
+    {
+      "source": "/s/(.*)",
       "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
     }
   ]
