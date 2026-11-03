@@ -1,0 +1,6 @@
+{
+  "name": "spore-website",
+  "private": true,
+  "description": "joinspore.com: the site, the pitch deck, and the spore link previews",
+  "type": "module"
+}
