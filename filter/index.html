@@ -10,8 +10,13 @@
 <meta property="og:url" content="https://joinspore.com/filter">
 <meta property="og:title" content="Some things only unlock in person.">
 <meta property="og:description" content="Turn any photo into a dormant spore. The full picture is for the people who show up.">
-<meta property="og:image" content="https://joinspore.com/og.png">
+<meta property="og:image" content="https://joinspore.com/og-filter.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Some things only unlock in person.">
+<meta name="twitter:description" content="Turn any photo into a dormant spore. The full picture is for the people who show up.">
+<meta name="twitter:image" content="https://joinspore.com/og-filter.png">
 <meta name="theme-color" content="#081525">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -68,6 +73,9 @@
   .editor { display: none; }
   .editor.show { display: block; }
   .stage { position: relative; display: flex; justify-content: center; margin-bottom: 18px; }
+  .stage img { display: block; max-width: 100%; max-height: 72vh; width: auto; height: auto; border-radius: 6px;
+               box-shadow: 0 24px 60px rgba(0,0,0,0.5); -webkit-touch-callout: default; user-select: auto; }
+  .stage img[hidden] { display: none; }
   .stage canvas { display: block; max-width: 100%; max-height: 72vh; width: auto; height: auto; border-radius: 6px;
                   box-shadow: 0 24px 60px rgba(0,0,0,0.5); cursor: crosshair; }
   .busy { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
@@ -89,6 +97,17 @@
   .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .actions .btn { width: 100%; }
   .again { display: block; margin: 14px auto 0; background: none; border: none; color: var(--mid); font: 500 14px Inter, sans-serif; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .inapp { display: none; margin: 0 0 16px; padding: 12px 14px; border-radius: 14px; font-size: 14px; line-height: 1.5;
+           background: rgba(62,207,207,0.1); border: 1px solid rgba(62,207,207,0.35); color: var(--cream); text-align: center; }
+  .inapp.show { display: block; }
+  .inapp b { color: var(--teal); }
+  .spread { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); }
+  .spread p { font-size: 14px; color: rgba(250,250,247,0.72); text-align: center; margin: -2px 0 12px; }
+  .spread-btns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .spread-btns a, .spread-btns button { display: flex; align-items: center; justify-content: center; font: 600 14px Inter, system-ui, sans-serif;
+           color: var(--cream); text-decoration: none; background: rgba(255,255,255,0.04); border: 1px solid rgba(62,207,207,0.3);
+           border-radius: 12px; padding: 12px 6px; cursor: pointer; }
+  .spread-btns a:hover, .spread-btns button:hover { border-color: var(--teal); background: rgba(62,207,207,0.08); }
   .tip { margin-top: 16px; text-align: center; font-size: 14px; color: rgba(250,250,247,0.72); }
 
   .beta { margin: 34px 0 20px; text-align: center; }
@@ -140,7 +159,8 @@
     <!-- Step 2: the result -->
     <div class="editor" id="editor">
       <div class="stage">
-        <canvas id="out" aria-label="Your photo with the SPORE filter"></canvas>
+        <canvas id="out" aria-label="Your photo"></canvas>
+        <img id="result" alt="Your spore" hidden>
         <div class="busy" id="busy"><div class="spin"></div><span id="busy-text">Going dormant…</span></div>
       </div>
       <p class="hint" id="hint"></p>
@@ -160,12 +180,25 @@
         </div>
       </div>
 
+      <p class="inapp" id="inapp"><b>Press and hold your spore</b> to save it to your photos. To share it straight to your story, tap <b>•••</b> and choose <b>Open in browser</b>.</p>
       <div class="actions">
         <button type="button" class="btn btn-primary" id="share">Share</button>
         <button type="button" class="btn btn-ghost" id="save">Save image</button>
       </div>
       <button type="button" class="again" id="again">Use a different photo</button>
       <p class="tip">Post it. When someone asks what's behind it, tell them to come find out.</p>
+      <div class="spread">
+        <div class="control-label" style="text-align:center">Spread it</div>
+        <p>Send the link so your people can make theirs.</p>
+        <div class="spread-btns">
+          <a id="sh-sms" href="#">Messages</a>
+          <a id="sh-wa" href="#" target="_blank" rel="noopener">WhatsApp</a>
+          <a id="sh-fb" href="#" target="_blank" rel="noopener">Facebook</a>
+          <a id="sh-x" href="#" target="_blank" rel="noopener">X</a>
+          <a id="sh-threads" href="#" target="_blank" rel="noopener">Threads</a>
+          <button type="button" id="sh-copy">Copy link</button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -256,10 +289,22 @@ function fit(im) {
 }
 const wait = () => new Promise(r => requestAnimationFrame(() => setTimeout(r, 30)));
 
+// The finished spore is shown as a real image, so people can press and hold to save it. That is the one
+// save path that works inside Instagram's and Facebook's built-in browsers.
+const result = $('result');
+let lastBlob = null, resultUrl = null;
+async function showResult() {
+  lastBlob = await new Promise(r => out.toBlob(r, 'image/jpeg', 0.92));
+  if (resultUrl) URL.revokeObjectURL(resultUrl);
+  resultUrl = URL.createObjectURL(lastBlob);
+  await new Promise(r => { result.onload = r; result.onerror = r; result.src = resultUrl; });
+  result.hidden = false; out.style.display = 'none';
+}
 async function render(msg = 'Going dormant…') {
   busyText.textContent = msg; busy.classList.add('show');
   await wait();
   await SporeFilter.render(out, photo, { faces, murk, tagline });
+  await showResult();
   busy.classList.remove('show');
 }
 
@@ -282,6 +327,7 @@ async function usePhoto(file) {
     $('drop').style.display = ''; $('editor').classList.remove('show');
     return;
   }
+  result.hidden = true; out.style.display = '';
   out.width = photo.width; out.height = photo.height;
   out.getContext('2d').drawImage(photo, 0, 0);
   busyText.textContent = 'Finding the eyes…';
@@ -301,16 +347,18 @@ drop.addEventListener('drop', e => usePhoto(e.dataTransfer.files[0]));
 $('again').addEventListener('click', () => { $('file').value = ''; $('file').click(); });
 
 // Tap to add or remove a face.
-out.addEventListener('click', async e => {
+const onTap = async e => {
   if (!photo || busy.classList.contains('show')) return;
-  const rect = out.getBoundingClientRect();
+  const rect = (result.hidden ? out : result).getBoundingClientRect();
   const x = (e.clientX - rect.left) * out.width / rect.width, y = (e.clientY - rect.top) * out.height / rect.height;
   const hit = faces.findIndex(f => Math.hypot(f.x - x, f.y - y) < f.r);
   if (hit >= 0) faces.splice(hit, 1);
   else faces.push({ x, y, r: Math.min(out.width, out.height) * 0.16, eyes: null });
   setHint();
   await render();
-});
+};
+out.addEventListener('click', onTap);
+result.addEventListener('click', onTap);
 
 // ---------- options ----------
 for (const b of document.querySelectorAll('.pill')) b.addEventListener('click', async () => {
@@ -322,11 +370,11 @@ let fogTimer;
 $('fog').addEventListener('input', e => {
   murk = e.target.value / 100;
   clearTimeout(fogTimer);
-  fogTimer = setTimeout(() => photo && SporeFilter.render(out, photo, { faces, murk, tagline }), 60);
+  fogTimer = setTimeout(async () => { if (!photo) return; await SporeFilter.render(out, photo, { faces, murk, tagline }); await showResult(); }, 80);
 });
 
 // ---------- save and share ----------
-const toFile = () => new Promise(res => out.toBlob(b => res(new File([b], 'spore.jpg', { type: 'image/jpeg' })), 'image/jpeg', 0.92));
+const toFile = async () => new File([lastBlob || await new Promise(r => out.toBlob(r, 'image/jpeg', 0.92))], 'spore.jpg', { type: 'image/jpeg' });
 function download(file) {
   const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = file.name;
   document.body.appendChild(a); a.click(); a.remove();
@@ -338,12 +386,37 @@ $('share').addEventListener('click', async () => {
     try { await navigator.share({ files: [file] }); } catch (e) { if (e.name !== 'AbortError') download(file); }
   } else download(file);
 });
-$('save').addEventListener('click', async () => download(await toFile()));
-if (!(navigator.canShare && navigator.canShare({ files: [new File([''], 'x.jpg', { type: 'image/jpeg' })] }))) {
+// Instagram, Facebook, TikTok and similar apps open links in their own browser, which usually blocks both
+// sharing and downloads. There, point people to press and hold, or to open the page in their real browser.
+const inApp = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Messenger|Snapchat|musical_ly|Bytedance|TikTok|LinkedInApp|Line\//i.test(navigator.userAgent)
+  || new URLSearchParams(location.search).has('inapp');
+if (inApp) $('inapp').classList.add('show');
+$('save').addEventListener('click', async () => {
+  if (inApp) { $('inapp').scrollIntoView({ behavior: 'smooth', block: 'center' }); $('inapp').animate([{ transform: 'scale(1.03)' }, { transform: 'scale(1)' }], 400); return; }
+  download(await toFile());
+});
+if (inApp || !(navigator.canShare && navigator.canShare({ files: [new File([''], 'x.jpg', { type: 'image/jpeg' })] }))) {
   $('share').style.display = 'none';
   document.querySelector('.actions').style.gridTemplateColumns = '1fr';
   $('save').className = 'btn btn-primary';
 }
+
+// ---------- spread the page ----------
+// These share the page link, not the image: no platform lets a website post a photo for you.
+const PAGE = 'https://joinspore.com/filter';
+const LINE = 'Some things only unlock in person. Make your spore:';
+const enc = encodeURIComponent;
+$('sh-sms').href = `sms:?&body=${enc(`${LINE} ${PAGE}`)}`;
+$('sh-wa').href = `https://wa.me/?text=${enc(`${LINE} ${PAGE}`)}`;
+$('sh-fb').href = `https://www.facebook.com/sharer/sharer.php?u=${enc(PAGE)}`;
+$('sh-x').href = `https://x.com/intent/tweet?text=${enc(LINE)}&url=${enc(PAGE)}`;
+$('sh-threads').href = `https://www.threads.net/intent/post?text=${enc(`${LINE} ${PAGE}`)}`;
+$('sh-copy').addEventListener('click', async e => {
+  const btn = e.currentTarget;
+  try { await navigator.clipboard.writeText(PAGE); }
+  catch { const t = document.createElement('textarea'); t.value = PAGE; document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); }
+  btn.textContent = 'Copied'; setTimeout(() => { btn.textContent = 'Copy link'; }, 1600);
+});
 
 // ---------- beta list (same list as the joinspore.com waitlist) ----------
 $('beta-form').addEventListener('submit', async e => {
