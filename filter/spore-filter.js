@@ -1,6 +1,6 @@
 // SPORE filter engine.
-// Turns a photo into a spore: frosted-glass blur where only the eyes come through, teal mycelium grown
-// by space colonization, drifting spores, and the SPORE glass band with logo and tagline at the bottom.
+// Puts a photo into dormancy: frosted-glass blur where only the eyes come through, teal mycelium grown
+// by space colonization, drifting spores, the SPORE logo at the top and a slim glass tagline band at the bottom.
 // Everything runs in the browser. The photo never leaves the device.
 //
 // Usage:
@@ -41,20 +41,27 @@
 
   // ---------- bottom band layout ----------
   const tagFont = px => `700 ${px.toFixed(1)}px 'Space Grotesk', Inter, sans-serif`;
+  // Taglines break onto two lines at their natural pause, so the type can run much larger.
+  const TAG_LINES = [['YOU SPREAD THE CONTENT,', 'NOT AN ALGORITHM'], ['PRESENCE IS THE KEY', 'TO UNLOCK']];
   function bottomLayout() {
     const m = Math.min(W, H);
-    const tag = TAGLINES[tagIdx];
+    const lines = TAG_LINES[tagIdx];
     const ref = 100;
     ctx.save();
     ctx.font = tagFont(ref);
-    if ('letterSpacing' in ctx) ctx.letterSpacing = `${ref * 0.06}px`;
-    const wRef = ctx.measureText(tag).width;
+    if ('letterSpacing' in ctx) ctx.letterSpacing = `${ref * 0.05}px`;
+    const wRef = Math.max(...lines.map(l => ctx.measureText(l).width));
     ctx.restore();
-    const tfs = Math.min(m * 0.085, ref * (W * 0.86) / wRef);
-    const tagY = H - m * 0.06;
-    const lw = m * 0.2, lh = lw;
-    const ly = tagY - tfs * 0.74 - m * 0.03 - lh * 0.92;
-    return { m, tag, tfs, tagY, lw, lh, lx: (W - lw) / 2, ly, bandTop: ly + lh * 0.08 - m * 0.03 };
+    const tfs = Math.min(m * 0.11, ref * (W * 0.86) / wRef);
+    const lead = tfs * 1.08;
+    // Band: the two lines with even padding above and below.
+    const pad = Math.max(m * 0.04, tfs * 0.6);
+    const tagY = H - pad;                       // baseline of the last line
+    const bandTop = tagY - lead * (lines.length - 1) - tfs * 0.74 - pad;
+    // Logo sits at the top center.
+    const lw = m * 0.17, lh = lw;
+    const ly = m * 0.035;
+    return { m, lines, tfs, lead, tagY, lw, lh, lx: (W - lw) / 2, ly, bandTop };
   }
 
   // ---------- photo layers ----------
@@ -148,9 +155,11 @@
     const r = rng(seed);
     const k = W / 1125;
     const STEP = 5 * k, REACH = 70 * k, EAT = 10 * k;
+    const BL = bottomLayout();
+    const zones = [...faces, { x: W / 2, y: BL.ly + BL.lh * 0.5, r: BL.lw * 0.62 }];
     const faceFade = (x, y) => {
       let f = 1;
-      for (const fc of faces) {
+      for (const fc of zones) {
         const d = Math.hypot(x - fc.x, y - fc.y) / fc.r;
         if (d < 1) return 0;
         if (d < 1.8) f = Math.min(f, (d - 1) / 0.8);
@@ -419,10 +428,29 @@
     ctx.globalAlpha = 0.92; ctx.fillStyle = '#F6F4EC';
     ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
     ctx.font = tagFont(BL.tfs);
-    if ('letterSpacing' in ctx) ctx.letterSpacing = `${(BL.tfs * 0.06).toFixed(1)}px`;
-    ctx.fillText(BL.tag, W / 2, BL.tagY);
+    if ('letterSpacing' in ctx) ctx.letterSpacing = `${(BL.tfs * 0.05).toFixed(1)}px`;
+    BL.lines.forEach((line, i) => ctx.fillText(line, W / 2, BL.tagY - BL.lead * (BL.lines.length - 1 - i)));
     if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
-    if (LOGO.naturalWidth) { ctx.globalAlpha = 1; ctx.drawImage(LOGO, BL.lx, BL.ly, BL.lw, BL.lh); }
+    // Logo at the top on a small glass tab hanging from the top edge: the same frosted navy as the bottom
+    // band, with its lower corners rounded, so the top mirrors the bottom.
+    if (LOGO.naturalWidth) {
+      const tw = BL.lw * 1.32, th = BL.ly + BL.lh * 0.98, tx = (W - tw) / 2, tr = BL.m * 0.028;
+      const tab = () => { ctx.beginPath(); ctx.roundRect(tx, -tr, tw, th + tr, [0, 0, tr, tr]); };
+      ctx.save();
+      ctx.shadowColor = 'rgba(2,6,12,0.55)'; ctx.shadowBlur = 30 * k; ctx.shadowOffsetY = 4 * k;
+      tab(); ctx.fillStyle = 'rgba(7,18,33,0.6)'; ctx.fill();
+      ctx.restore();
+      ctx.save();
+      tab(); ctx.clip();
+      ctx.drawImage(frost, 0, 0);
+      ctx.fillStyle = 'rgba(7,18,33,0.8)'; ctx.fillRect(tx, 0, tw, th);
+      const tsheen = ctx.createLinearGradient(0, th, 0, th * 0.4);
+      tsheen.addColorStop(0, 'rgba(160,230,230,0.07)'); tsheen.addColorStop(1, 'rgba(160,230,230,0)');
+      ctx.fillStyle = tsheen; ctx.fillRect(tx, 0, tw, th);
+      ctx.restore();
+      ctx.globalAlpha = 1;
+      ctx.drawImage(LOGO, BL.lx, BL.ly, BL.lw, BL.lh);
+    }
     ctx.globalAlpha = 1;
   }
 

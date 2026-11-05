@@ -4,18 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>SPORE · Some things only unlock in person</title>
-<meta name="description" content="Content you spread face to face, not through an algorithm. Turn any photo into a dormant spore.">
+<meta name="description" content="Content you spread face to face, not through an algorithm. Make any photo go dormant.">
 <link rel="icon" type="image/svg+xml" href="/logo.svg">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://joinspore.com/filter">
 <meta property="og:title" content="Some things only unlock in person.">
-<meta property="og:description" content="Turn any photo into a dormant spore. The full picture is for the people who show up.">
+<meta property="og:description" content="Make any photo go dormant. The full picture is for the people who show up.">
 <meta property="og:image" content="https://joinspore.com/og-filter.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Some things only unlock in person.">
-<meta name="twitter:description" content="Turn any photo into a dormant spore. The full picture is for the people who show up.">
+<meta name="twitter:description" content="Make any photo go dormant. The full picture is for the people who show up.">
 <meta name="twitter:image" content="https://joinspore.com/og-filter.png">
 <meta name="theme-color" content="#081525">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -144,14 +144,14 @@
   <section class="hero">
     <div class="eyebrow">You spread it. Not an algorithm.</div>
     <h1>Some things only unlock <em>in person.</em></h1>
-    <p class="sub">Turn any photo into a dormant spore. Your feed gets a glimpse. The full picture is for the people who show up.</p>
+    <p class="sub">Make any photo go dormant. Your feed gets a glimpse. The full picture is for the people who show up.</p>
   </section>
 
   <section class="card" id="tool">
     <!-- Step 1: pick a photo -->
     <label class="drop" id="drop" for="file">
       <img src="/logo.png" alt="">
-      <span class="btn btn-primary">Make my spore</span>
+      <span class="btn btn-primary">Make it dormant</span>
       <span class="fine">Your photo never leaves your phone.</span>
     </label>
     <input id="file" class="sr" type="file" accept="image/*">
@@ -160,7 +160,7 @@
     <div class="editor" id="editor">
       <div class="stage">
         <canvas id="out" aria-label="Your photo"></canvas>
-        <img id="result" alt="Your spore" hidden>
+        <img id="result" alt="Your photo, gone dormant" hidden>
         <div class="busy" id="busy"><div class="spin"></div><span id="busy-text">Going dormant…</span></div>
       </div>
       <p class="hint" id="hint"></p>
@@ -180,7 +180,7 @@
         </div>
       </div>
 
-      <p class="inapp" id="inapp"><b>Press and hold your spore</b> to save it to your photos. To share it straight to your story, tap <b>•••</b> and choose <b>Open in browser</b>.</p>
+      <p class="inapp" id="inapp"><b>Press and hold your photo</b> to save it to your photos. To share it straight to your story, tap <b>•••</b> and choose <b>Open in browser</b>.</p>
       <div class="actions">
         <button type="button" class="btn btn-primary" id="share">Share</button>
         <button type="button" class="btn btn-ghost" id="save">Save image</button>
@@ -189,7 +189,7 @@
       <p class="tip">Post it. When someone asks what's behind it, tell them to come find out.</p>
       <div class="spread">
         <div class="control-label" style="text-align:center">Spread it</div>
-        <p>Send the link so your people can make theirs.</p>
+        <p>You're the SPORE. Send the link to your people.</p>
         <div class="spread-btns">
           <a id="sh-sms" href="#">Messages</a>
           <a id="sh-wa" href="#" target="_blank" rel="noopener">WhatsApp</a>
@@ -289,7 +289,7 @@ function fit(im) {
 }
 const wait = () => new Promise(r => requestAnimationFrame(() => setTimeout(r, 30)));
 
-// The finished spore is shown as a real image, so people can press and hold to save it. That is the one
+// The finished photo is shown as a real image, so people can press and hold to save it. That is the one
 // save path that works inside Instagram's and Facebook's built-in browsers.
 const result = $('result');
 let lastBlob = null, resultUrl = null;
@@ -374,7 +374,7 @@ $('fog').addEventListener('input', e => {
 });
 
 // ---------- save and share ----------
-const toFile = async () => new File([lastBlob || await new Promise(r => out.toBlob(r, 'image/jpeg', 0.92))], 'spore.jpg', { type: 'image/jpeg' });
+const toFile = async () => new File([lastBlob || await new Promise(r => out.toBlob(r, 'image/jpeg', 0.92))], 'SPORE-dormant.jpg', { type: 'image/jpeg' });
 function download(file) {
   const a = document.createElement('a'); a.href = URL.createObjectURL(file); a.download = file.name;
   document.body.appendChild(a); a.click(); a.remove();
@@ -404,7 +404,7 @@ if (inApp || !(navigator.canShare && navigator.canShare({ files: [new File([''],
 // ---------- spread the page ----------
 // These share the page link, not the image: no platform lets a website post a photo for you.
 const PAGE = 'https://joinspore.com/filter';
-const LINE = 'Some things only unlock in person. Make your spore:';
+const LINE = 'Some things only unlock in person. Make yours:';
 const enc = encodeURIComponent;
 $('sh-sms').href = `sms:?&body=${enc(`${LINE} ${PAGE}`)}`;
 $('sh-wa').href = `https://wa.me/?text=${enc(`${LINE} ${PAGE}`)}`;
