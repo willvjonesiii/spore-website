@@ -83,7 +83,7 @@ export default async function handler(req) {
           <div><dt>Collected</dt><dd>${esc(collected)}</dd></div>
           <div><dt>Unlocks</dt><dd>In person only</dd></div>
         </dl>
-        <p class="warn">Handle in person. Do not open alone.</p>
+        <p class="warn">You can't open this alone. Meet the SPORE who made it.</p>
       </section>
       <section class="lineage">
         <h2>The <em>${esc(cap(sp.genus))}</em> lineage</h2>
