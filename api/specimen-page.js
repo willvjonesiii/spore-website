@@ -84,7 +84,7 @@ export default async function handler(req) {
       <p class="intro">Someone made this with SPORE. You can make your own from any photo.</p>
       ${sp.live ? `<img class="photo" src="${esc(image)}" alt="Specimen ${esc(sp.catalog)}, ${esc(name)}">` : ''}
       <a class="btn btn-primary" href="${make}">Make your own specimen</a>
-      <p class="hint">Upload any photo. It goes dormant, gets its own Latin name, and only unlocks in person.</p>
+      <p class="hint">Upload any photo. It goes dormant, becomes a one-of-a-kind specimen, and only unlocks in person.</p>
       <section class="label" aria-label="Specimen label">
         <div class="label-top"><span>SPORE Specimen Archive</span><span class="stamp ${sp.live ? '' : 'out'}">${sp.live ? 'Dormant' : 'Fully dormant'}</span></div>
         <div class="no">Specimen No. ${esc(sp.catalog)}</div>
