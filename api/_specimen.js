@@ -4,7 +4,8 @@
 
 export const SUPA_URL = process.env.EXPO_PUBLIC_SUPABASE_URL;
 export const SUPA_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
-export const SLUG_RE = /^[a-z]+-[a-z]+-[0-9]{2,4}$/;
+// Holotype: nebula-rosea-5066. A passed-on link adds a short tag: nebula-rosea-5066-k7q.
+export const SLUG_RE = /^[a-z]+-[a-z]+-[0-9]{2,4}(-[a-z0-9]{3})?$/;
 
 export async function rpc(name, args) {
   return fetch(`${SUPA_URL}/rest/v1/rpc/${name}`, {
@@ -29,6 +30,7 @@ export async function info(slug) {
 export const cap = s => (s ? s[0].toUpperCase() + s.slice(1) : '');
 export const speciesName = sp => `${cap(sp.genus)} ${sp.epithet}`;
 export const genLabel = sp => (sp.generation > 1 ? `Gen ${sp.generation}` : 'Holotype');
+export const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 
 export function toBase64(bytes) {
   let s = '';

@@ -1,8 +1,8 @@
 // GET /specimen/<slug>  (rewritten to /api/specimen-page?s=<slug>)
-// The page a specimen link opens: the photo, its specimen label, and its lineage drawn as mycelium.
+// The page a specimen link opens: the photo, its specimen label, and how far it has traveled, drawn as mycelium.
 // Messages, WhatsApp and friends read this page for the preview card, whose image is the photo itself.
 
-import { SLUG_RE, info, cap, speciesName, genLabel } from './_specimen.js';
+import { SLUG_RE, info, cap, speciesName, genLabel, plural } from './_specimen.js';
 
 export const config = { runtime: 'edge' };
 
@@ -42,7 +42,9 @@ function lineageSvg(nodes) {
     const cx = px(nd.n).toFixed(1), cy = py(nd.n).toFixed(1);
     if (nd.me) {
       dots += `<circle cx="${cx}" cy="${cy}" r="11" class="ring"/><circle cx="${cx}" cy="${cy}" r="6.5" class="me"/>`;
-      marks += `<text x="${cx}" y="${(+cy + 26).toFixed(1)}" class="lbl">this specimen</text>`;
+      // Beside the dot, so it never sits on a thread.
+      const right = +cx < W - 120;
+      marks += `<text x="${(+cx + (right ? 18 : -18)).toFixed(1)}" y="${(+cy + 4).toFixed(1)}" class="lbl" style="text-anchor:${right ? 'start' : 'end'}">this specimen</text>`;
     } else {
       dots += `<circle cx="${cx}" cy="${cy}" r="${nd.g === minG ? 5.5 : 4}" class="dot"/>`;
     }
@@ -59,44 +61,95 @@ export default async function handler(req) {
   const slug = (searchParams.get('s') || '').toLowerCase();
   const sp = SLUG_RE.test(slug) ? await info(slug) : null;
 
-  let title, description, image, pageUrl, body;
+  let title, description, image, pageUrl, body, script = '';
   if (sp) {
     const name = speciesName(sp);
     const gl = genLabel(sp);
     const collected = new Date(sp.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const away = sp.generation - 1;
+    const passes = Math.max(0, sp.count - 1);
+    const depth = Math.max(0, (sp.max_gen || 1) - 1);
     title = `Specimen No. ${sp.catalog}. Handle in person.`;
     description = `${name} · ${gl}. Some things only unlock in person.`;
     pageUrl = `${origin}/specimen/${sp.slug}`;
     image = sp.live ? `${origin}/api/specimen-image?s=${sp.slug}` : `${origin}/og-filter.png`;
-    const lineLine = sp.generation > 1
-      ? `This specimen is ${away} SPORE${away === 1 ? '' : 'S'} away from its Source.`
-      : `This is the holotype. Every specimen in the ${esc(cap(sp.genus))} lineage traces back to it.`;
+    const make = `/filter?sparked=${esc(sp.slug)}`;
+    const journeyStats = passes
+      ? `Passed on ${plural(passes, 'time', 'times')} · ${plural(depth, 'SPORE', 'SPORES')} deep`
+      : 'Not passed on yet.';
+    const meLine = sp.generation > 1
+      ? `This link is Gen ${sp.generation}, ${plural(away, 'SPORE', 'SPORES')} from its Source.`
+      : 'This is the original. Every time it\'s passed on, its journey grows here.';
     body = `
+      <p class="intro">Someone made this with SPORE. You can make your own from any photo.</p>
       ${sp.live ? `<img class="photo" src="${esc(image)}" alt="Specimen ${esc(sp.catalog)}, ${esc(name)}">` : ''}
+      <a class="btn btn-primary" href="${make}">Make your own specimen</a>
+      <p class="hint">Upload any photo. It goes dormant, gets its own Latin name, and only unlocks in person.</p>
       <section class="label" aria-label="Specimen label">
         <div class="label-top"><span>SPORE Specimen Archive</span><span class="stamp ${sp.live ? '' : 'out'}">${sp.live ? 'Dormant' : 'Fully dormant'}</span></div>
         <div class="no">Specimen No. ${esc(sp.catalog)}</div>
         <div class="species"><em>${esc(name)}</em></div>
         <dl>
-          <div><dt>Lineage</dt><dd>${esc(cap(sp.genus).toUpperCase())} · ${esc(gl)}</dd></div>
+          <div><dt>Generation</dt><dd>${esc(gl)}</dd></div>
           <div><dt>Collected</dt><dd>${esc(collected)}</dd></div>
           <div><dt>Unlocks</dt><dd>In person only</dd></div>
         </dl>
         <p class="warn">You can't open this alone. Meet the SPORE who made it.</p>
       </section>
-      <section class="lineage">
-        <h2>The <em>${esc(cap(sp.genus))}</em> lineage</h2>
-        <p class="stats">${esc(sp.count)} specimen${sp.count === 1 ? '' : 's'} · deepest Gen ${esc(sp.max_gen)}</p>
-        ${lineageSvg(sp.nodes)}
-        <p class="away">${lineLine}</p>
+      <section class="journey">
+        <h2>How far it has <em>traveled</em></h2>
+        <p class="stats">${journeyStats}${sp.sparked ? ` · sparked ${plural(sp.sparked, 'new specimen', 'new specimens')}` : ''}</p>
+        ${sp.count > 1 ? lineageSvg(sp.nodes) : ''}
+        <p class="away">${meLine}</p>
+        ${sp.live ? `
+        <button type="button" class="btn btn-ghost" id="pass">Pass this one on</button>
+        <p class="hint">Get your own link to this photo and send it to your people. Its journey grows each time.</p>
+        <div class="passed" id="passed" hidden>
+          <input id="pass-url" readonly aria-label="Your link to pass on">
+          <div class="pass-btns">
+            <button type="button" id="pass-share">Share</button>
+            <a id="pass-sms" href="#">Messages</a>
+            <a id="pass-wa" href="#" target="_blank" rel="noopener">WhatsApp</a>
+            <button type="button" id="pass-copy">Copy</button>
+          </div>
+        </div>
+        <p class="pass-note" id="pass-note"></p>` : `<p class="hint">This photo has gone fully dormant, so it can't be passed on anymore.</p>`}
       </section>
-      <div class="actions">
-        <a class="btn btn-primary" href="/filter?from=${esc(sp.slug)}">Continue this lineage</a>
-        <a class="btn btn-ghost" href="/filter#beta">Get beta access</a>
-      </div>
       <p class="close">Online, a specimen spreads by link. In SPORE, it spreads only in person.</p>
-      <p class="fine">${sp.live ? 'Specimen links stay live for 30 days.' : 'This specimen\'s photo has gone fully dormant. Its lineage can still grow.'}</p>`;
+      <p class="fine"><a href="/filter#beta">Get beta access</a> · Specimen links stay live for 30 days.</p>`;
+    if (sp.live) script = `<script>
+(() => {
+  const $ = id => document.getElementById(id), enc = encodeURIComponent;
+  const SLUG = ${JSON.stringify(sp.slug)}, CAT = ${JSON.stringify(sp.catalog)};
+  let url = null;
+  $('pass').addEventListener('click', async () => {
+    const btn = $('pass'), note = $('pass-note');
+    btn.disabled = true; btn.textContent = 'Getting your link…'; note.textContent = '';
+    try {
+      const r = await fetch('/api/specimen', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pass: SLUG }) });
+      const d = await r.json();
+      if (!r.ok || !d.url) throw new Error(d.error || 'failed');
+      url = d.url.replace('://www.', '://');
+      const line = 'Specimen No. ' + CAT + '. Handle in person.';
+      $('pass-url').value = url.replace(/^https?:\\/\\//, '');
+      $('pass-sms').href = 'sms:?&body=' + enc(line + ' ' + url);
+      $('pass-wa').href = 'https://wa.me/?text=' + enc(line + ' ' + url);
+      if (!navigator.share) $('pass-share').style.display = 'none';
+      $('pass-share').onclick = () => navigator.share({ title: line, text: line, url }).catch(() => {});
+      btn.hidden = true; $('passed').hidden = false;
+      note.textContent = 'Your link is Gen ' + d.generation + '. Send it on.';
+    } catch (e) {
+      btn.disabled = false; btn.textContent = 'Pass this one on';
+      note.textContent = 'That did not go through. Try again.';
+    }
+  });
+  $('pass-url').addEventListener('focus', e => e.target.select());
+  $('pass-copy').addEventListener('click', async e => {
+    try { await navigator.clipboard.writeText(url); } catch { $('pass-url').select(); document.execCommand('copy'); }
+    e.currentTarget.textContent = 'Copied'; setTimeout(() => { $('pass-copy').textContent = 'Copy'; }, 1600);
+  });
+})();
+</script>`;
   } else {
     title = 'Some things only unlock in person.';
     description = 'Make any photo go dormant. The full picture is for the people who show up.';
@@ -104,7 +157,7 @@ export default async function handler(req) {
     image = `${origin}/og-filter.png`;
     body = `
       <h1>This specimen is <em>not in the archive.</em></h1>
-      <p class="sub">It may have been mistyped. Check the name on the photo, or start a lineage of your own.</p>
+      <p class="sub">It may have been mistyped. Check the name and number on the photo, or make your own specimen.</p>
       <div class="actions">
         <a class="btn btn-primary" href="/filter">Make it dormant</a>
         <a class="btn btn-ghost" href="/filter#beta">Get beta access</a>
@@ -180,16 +233,32 @@ ${image.endsWith('.png') ? '<meta property="og:image:width" content="1200">\n<me
   .btn-ghost { color: var(--cream); border-color: rgba(62,207,207,0.45); }
   .close { margin-top: 26px; font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 16px; }
   .fine { font-size: 13px; color: var(--mid); margin-top: 10px; }
+  .fine a { color: var(--teal); }
+  .intro { font-size: 15px; color: rgba(250,250,247,0.82); margin: 10px auto 4px; max-width: 400px; }
+  .hint { font-size: 13px; color: var(--mid); margin: 10px auto 0; max-width: 400px; }
+  .wrap > .btn-primary { margin-top: 2px; }
+  .journey { margin-top: 6px; }
+  .journey .btn { width: 100%; margin-top: 4px; }
+  .passed { margin-top: 12px; }
+  .passed input { width: 100%; font: 600 15px 'Space Grotesk', Inter, sans-serif; color: var(--teal); text-align: center; background: rgba(62,207,207,0.08);
+                  border: 1px solid rgba(62,207,207,0.45); border-radius: 12px; padding: 12px; outline: none; margin-bottom: 8px; }
+  .pass-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .pass-btns a, .pass-btns button { display: flex; align-items: center; justify-content: center; font: 600 13px Inter, system-ui, sans-serif; color: var(--cream);
+                  text-decoration: none; background: rgba(255,255,255,0.04); border: 1px solid rgba(62,207,207,0.3); border-radius: 12px; padding: 11px 4px; cursor: pointer; }
+  .pass-note { font-size: 13px; color: var(--mid); min-height: 18px; margin-top: 8px; }
+  .btn:disabled { opacity: .6; }
+  button.btn { cursor: pointer; background-color: transparent; width: 100%; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <a class="brand" href="/"><img src="/spore-logo-simple.png" alt=""><span>SP<b>O</b>RE</span></a>
-    <a class="header-link" href="/filter#beta">Get beta access</a>
+    <a class="header-link" href="/filter">Make yours</a>
   </header>
   ${body}
 </div>
+${script}
 </body>
 </html>`;
 

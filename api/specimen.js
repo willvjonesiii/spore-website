@@ -1,6 +1,7 @@
-// Making a specimen, in two steps so the name can be printed on the photo before it uploads.
-//   POST /api/specimen            body {"parent": "<slug>"|null}  -> reserves a name (joins the parent's lineage)
-//   PUT  /api/specimen?s=&t=      body: the finished, labeled JPEG -> attaches it and returns the link
+// Specimens.
+//   POST /api/specimen  {"sparkedBy": "<slug>"|null}  -> reserves a new holotype name (Make your own).
+//                       {"pass": "<slug>"}            -> a new link for the same photo, one generation deeper (Pass it on).
+//   PUT  /api/specimen?s=&t=   body: the finished, labeled JPEG -> attaches it to the reserved name.
 // Only filtered photos made on joinspore.com/filter are sent here; the original never leaves the device.
 
 import { SUPA_URL, SUPA_KEY, SLUG_RE, rpc, toBase64, json } from './_specimen.js';
@@ -15,13 +16,20 @@ export default async function handler(req) {
 
   if (req.method === 'POST') {
     const body = await req.json().catch(() => ({}));
-    const parent = typeof body.parent === 'string' && SLUG_RE.test(body.parent) ? body.parent : null;
-    const res = await rpc('reserve_specimen', { p_parent: parent });
-    if (!res.ok) {
-      const text = await res.text();
-      if (/not found/i.test(text)) return json({ error: 'That specimen does not exist.' }, 404);
-      return json({ error: 'Could not name your specimen.' }, 502);
+    if (typeof body.pass === 'string') {
+      if (!SLUG_RE.test(body.pass)) return json({ error: 'That specimen does not exist.' }, 404);
+      const res = await rpc('pass_specimen', { p_parent: body.pass });
+      if (!res.ok) {
+        const text = await res.text();
+        if (/not live/i.test(text)) return json({ error: 'This specimen has gone fully dormant.' }, 410);
+        return json({ error: 'That specimen does not exist.' }, 404);
+      }
+      const sp = await res.json();
+      return json({ ...sp, url: `${url.origin}/specimen/${sp.slug}` }, 201);
     }
+    const sparked = typeof body.sparkedBy === 'string' && SLUG_RE.test(body.sparkedBy) ? body.sparkedBy : null;
+    const res = await rpc('reserve_specimen', { p_sparked_by: sparked });
+    if (!res.ok) return json({ error: 'Could not name your specimen.' }, 502);
     return json(await res.json(), 201);
   }
 

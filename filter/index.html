@@ -170,7 +170,6 @@
   </section>
 
   <section class="card" id="tool">
-    <p class="lineage-banner" id="lineage-banner" hidden></p>
     <!-- Step 1: pick a photo -->
     <label class="drop" id="drop" for="file">
       <img src="/logo.png" alt="">
@@ -179,7 +178,7 @@
     </label>
     <input id="file" class="sr" type="file" accept="image/*">
     <form class="find" id="find-form" novalidate>
-      <label for="find-input">Saw a specimen? Continue its lineage.</label>
+      <label for="find-input">Saw a specimen on someone's post? Look it up.</label>
       <div class="find-row">
         <input id="find-input" class="field" placeholder="Nocta stellaris 417" autocomplete="off" autocapitalize="off" spellcheck="false">
         <button class="btn btn-ghost" type="submit">Find</button>
@@ -449,8 +448,11 @@ if (inApp || !(navigator.canShare && navigator.canShare({ files: [new File([''],
 const PAGE = 'https://joinspore.com/filter';
 const enc = encodeURIComponent;
 const cap = w => (w ? w[0].toUpperCase() + w.slice(1) : '');
-const SLUG_RE = /^[a-z]+-[a-z]+-[0-9]{2,4}$/;
-let shareUrl = null, specimen = null, parent = null;
+const SLUG_RE = /^[a-z]+-[a-z]+-[0-9]{2,4}(-[a-z0-9]{3})?$/;
+let shareUrl = null, specimen = null;
+// Arriving from someone's specimen page (/filter?sparked=<slug>) credits that specimen with sparking yours.
+// Your photo is always its own new specimen; nothing about yours is tied to theirs.
+const sparkedBy = (() => { const v = (new URLSearchParams(location.search).get('sparked') || '').toLowerCase(); return SLUG_RE.test(v) ? v : null; })();
 function specimenLabel() {
   return specimen ? { genus: specimen.genus, epithet: specimen.epithet, catalog: specimen.catalog, generation: specimen.generation } : null;
 }
@@ -467,19 +469,10 @@ const SPEC_NOTE = 'Gives your photo a specimen name and label, plus a link whose
 function clearSpecimen() {
   specimen = null; shareUrl = null;
   $('spec-done').hidden = true;
-  $('make-spec').hidden = false; $('make-spec').disabled = false;
-  $('make-spec').textContent = parent ? `Continue the ${cap(parent.genus)} lineage` : 'Make it a specimen';
+  $('make-spec').hidden = false; $('make-spec').disabled = false; $('make-spec').textContent = 'Make it a specimen';
   $('spec-note').className = 'link-note'; $('spec-note').textContent = SPEC_NOTE;
   document.querySelector('.controls').style.display = '';
   setSpread();
-}
-function setParent(p) {
-  parent = p;
-  const b = $('lineage-banner');
-  if (!p) { b.hidden = true; return; }
-  b.innerHTML = `Continuing the <em>${cap(p.genus)}</em> lineage from Specimen No. ${p.catalog}. Your photo becomes Gen ${p.generation + 1}.`;
-  b.hidden = false;
-  if (!specimen) $('make-spec').textContent = `Continue the ${cap(p.genus)} lineage`;
 }
 async function lookup(slug) {
   if (!SLUG_RE.test(slug)) return null;
@@ -488,12 +481,13 @@ async function lookup(slug) {
 // Accepts what people copy off a photo: "Nocta stellaris 417", "SPECIMEN NO. 417 · NOCTA STELLARIS", a link, or a slug.
 function toSlug(text) {
   const t = String(text || '').toLowerCase();
-  const fromUrl = t.match(/specimen\/([a-z]+-[a-z]+-[0-9]{2,4})/);
+  const fromUrl = t.match(/specimen\/([a-z]+-[a-z]+-[0-9]{2,4}(?:-[a-z0-9]{3})?)/);
   if (fromUrl) return fromUrl[1];
   const words = t.replace(/specimen|holotype|gen\s*\d+|no\./g, ' ').match(/[a-z]+|[0-9]+/g) || [];
   const letters = words.filter(w => /^[a-z]+$/.test(w)), num = words.find(w => /^[0-9]{2,4}$/.test(w));
   return letters.length >= 2 && num ? `${letters[0]}-${letters[1]}-${num}` : '';
 }
+// Look up a specimen seen on a post and open its page, where it can be passed on.
 $('find-form').addEventListener('submit', async e => {
   e.preventDefault();
   const note = $('find-note');
@@ -503,14 +497,9 @@ $('find-form').addEventListener('submit', async e => {
   note.textContent = 'Searching the archive…';
   const p = await lookup(slug);
   if (!p) { note.textContent = 'Not in the archive. Check the name and number on the photo.'; note.classList.add('err'); return; }
-  setParent(p);
-  note.textContent = 'Found it. Now choose your photo.';
-  $('lineage-banner').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  note.textContent = 'Found it. Opening…';
+  location.href = `/specimen/${p.slug}`;
 });
-{ // Arriving from a specimen page: /filter?from=<slug>
-  const from = new URLSearchParams(location.search).get('from');
-  if (from) lookup(from.toLowerCase()).then(p => p && setParent(p));
-}
 setSpread();
 $('make-spec').addEventListener('click', async () => {
   const btn = $('make-spec'), note = $('spec-note');
@@ -518,7 +507,7 @@ $('make-spec').addEventListener('click', async () => {
   btn.disabled = true; btn.textContent = 'Naming your specimen…';
   let reserved = null;
   try {
-    const r = await fetch('/api/specimen', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ parent: parent ? parent.slug : null }) });
+    const r = await fetch('/api/specimen', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sparkedBy }) });
     reserved = await r.json().catch(() => null);
     if (!r.ok || !reserved || !reserved.slug) throw new Error('reserve');
     specimen = reserved;
@@ -546,7 +535,7 @@ $('make-spec').addEventListener('click', async () => {
     const hadLabel = !!specimen;
     specimen = null; shareUrl = null;
     if (hadLabel) await render('Updating…');
-    btn.disabled = false; btn.textContent = parent ? `Continue the ${cap(parent.genus)} lineage` : 'Make it a specimen';
+    btn.disabled = false; btn.textContent = 'Make it a specimen';
     note.className = 'link-note err'; note.textContent = 'That did not go through. Try again.';
   }
 });
