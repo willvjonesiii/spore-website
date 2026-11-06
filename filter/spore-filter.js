@@ -12,7 +12,7 @@
   const LOGO_SRC = '/logo.png';
 
   let cv, ctx, W = 0, H = 0, img = null, faces = [], source = { x: 0, y: 0 };
-  let murk = 1, tagIdx = 0;
+  let murk = 1, tagIdx = 0, label = null;
 
   function rng(seed) {
     return () => {
@@ -57,11 +57,14 @@
     // Band: the two lines with even padding above and below.
     const pad = Math.max(m * 0.04, tfs * 0.6);
     const tagY = H - pad;                       // baseline of the last line
-    const bandTop = tagY - lead * (lines.length - 1) - tfs * 0.74 - pad;
+    let bandTop = tagY - lead * (lines.length - 1) - tfs * 0.74 - pad;
+    // Specimen label: one small line above the tagline once the photo has a name.
+    const lfs = Math.max(10, tfs * 0.34);
+    if (label) bandTop -= lfs * 1.9;
     // Logo sits at the top center.
     const lw = m * 0.17, lh = lw;
     const ly = m * 0.035;
-    return { m, lines, tfs, lead, tagY, lw, lh, lx: (W - lw) / 2, ly, bandTop };
+    return { m, lines, tfs, lead, tagY, lw, lh, lx: (W - lw) / 2, ly, bandTop, lfs, labelY: label ? bandTop + pad * 0.85 + lfs * 0.74 : 0 };
   }
 
   // ---------- photo layers ----------
@@ -430,6 +433,20 @@
     ctx.font = tagFont(BL.tfs);
     if ('letterSpacing' in ctx) ctx.letterSpacing = `${(BL.tfs * 0.05).toFixed(1)}px`;
     BL.lines.forEach((line, i) => ctx.fillText(line, W / 2, BL.tagY - BL.lead * (BL.lines.length - 1 - i)));
+    if (label) {
+      // SPECIMEN NO. 417 · NOCTA STELLARIS · HOLOTYPE (or GEN 3)
+      const txt = `SPECIMEN NO. ${label.catalog} · ${label.genus} ${label.epithet} · ${label.generation > 1 ? 'GEN ' + label.generation : 'HOLOTYPE'}`.toUpperCase();
+      let fs = BL.lfs;
+      ctx.font = `600 ${fs.toFixed(1)}px 'Space Grotesk', Inter, sans-serif`;
+      if ('letterSpacing' in ctx) ctx.letterSpacing = `${(fs * 0.16).toFixed(1)}px`;
+      while (ctx.measureText(txt).width > W * 0.88 && fs > 8) {
+        fs *= 0.94; ctx.font = `600 ${fs.toFixed(1)}px 'Space Grotesk', Inter, sans-serif`;
+        if ('letterSpacing' in ctx) ctx.letterSpacing = `${(fs * 0.16).toFixed(1)}px`;
+      }
+      ctx.fillStyle = '#3ECFCF'; ctx.globalAlpha = 0.95;
+      ctx.fillText(txt, W / 2, BL.labelY);
+      ctx.fillStyle = '#F6F4EC';
+    }
     if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
     // Logo at the top on a small glass tab hanging from the top edge: the same frosted navy as the bottom
     // band, with its lower corners rounded, so the top mirrors the bottom.
@@ -461,6 +478,7 @@
     cv = canvas; ctx = cv.getContext('2d');
     if (opts.murk != null) murk = Math.max(0, Math.min(1, opts.murk));
     if (opts.tagline != null) tagIdx = opts.tagline ? 1 : 0;
+    if ('label' in opts) label = opts.label || null;
     const newPhoto = image !== lastImg || `${image.width}x${image.height}` !== lastSize;
     if (newPhoto) {
       img = image; W = image.width; H = image.height;

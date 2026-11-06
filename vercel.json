@@ -4,6 +4,7 @@
   ],
   "rewrites": [
     { "source": "/s/:code", "destination": "/api/s?code=:code" },
+    { "source": "/specimen/:slug", "destination": "/api/specimen-page?s=:slug" },
     { "source": "/_expo/:path*", "destination": "https://spore-app-umber.vercel.app/_expo/:path*" },
     { "source": "/assets/:path*", "destination": "https://spore-app-umber.vercel.app/assets/:path*" },
     { "source": "/favicon.ico", "destination": "https://spore-app-umber.vercel.app/favicon.ico" }
